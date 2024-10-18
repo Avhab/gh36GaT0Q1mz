@@ -36,9 +36,36 @@ if(blur&&burger&&burgerMenu){
 					burgerMenu.style.display=null;
 				}, 300);}});}
 
+
+/*<----тестовый вывод размеров окна*/
+let body = document.querySelector("body");
+let tstDisp = document.createElement("div");
+body.append(tstDisp);
+tstDisp.style.cssText = "position:fixed;top:15px;left:2px;background:white;color:black;padding:0 5px;border: 1px solid red;line-height:normal;width:50px;height:25px";
+let tstDisp1 = document.createElement("div");
+body.append(tstDisp1);
+tstDisp1.style.cssText = "position:fixed;top:15px;left:62px;background:white;color:black;padding:0 5px;border: 1px solid red;line-height:normal;width:50px;height:25px";
+
+
+
+
 let hScrol = document.querySelectorAll(".hScrol");
 for (let i = 0; i < hScrol.length; i++) {
 	let scrolCont = hScrol[i].querySelector(".scrolCont");
+	
+	scrolCont.addEventListener("pointerdown", function (e) {
+		tstDisp.style.background = "red";
+		tstDisp1.style.background = "red";
+		});
+
+	scrolCont.addEventListener("pointerup", function (e) {
+		tstDisp.style.background = "white";
+		});
+	scrolCont.addEventListener("pointercancel", function (e) {
+		tstDisp1.style.background = "white";
+		});
+	
+	
 
 		let slide = scrolCont.querySelectorAll(".cont>*");
 		let arrLeft = hScrol[i].querySelector(".leftArr");
