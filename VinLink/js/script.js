@@ -1,3 +1,4 @@
+
 let blur = document.querySelector(".blur");
 let burger = document.querySelector(".burger");
 let burgerMenu = document.querySelector(".burgerMenu");
@@ -37,75 +38,52 @@ if(blur&&burger&&burgerMenu){
 				}, 300);}});}
 
 
-/*<----тестовый вывод размеров окна*/
-let body = document.querySelector("body");
-let tstDisp = document.createElement("div");
-body.append(tstDisp);
-tstDisp.style.cssText = "position:fixed;top:15px;left:2px;background:white;color:black;padding:0 5px;border: 1px solid red;line-height:normal;width:50px;height:25px";
-let tstDisp1 = document.createElement("div");
-body.append(tstDisp1);
-tstDisp1.style.cssText = "position:fixed;top:15px;left:62px;background:white;color:black;padding:0 5px;border: 1px solid red;line-height:normal;width:50px;height:25px";
-
-
-
-
 let hScrol = document.querySelectorAll(".hScrol");
 for (let i = 0; i < hScrol.length; i++) {
-	let scrolCont = hScrol[i].querySelector(".scrolCont");
-	
-	scrolCont.addEventListener("pointerdown", function (e) {
-		tstDisp.style.background = "red";
-		tstDisp1.style.background = "red";
-		});
+	let scrolCont = hScrol[i].querySelector(".hScrol>.scrolCont");
+	let slidFlag=true;
+	let dirFlag;
+	let sCoord = scrolCont.scrollLeft; 
 
-	scrolCont.addEventListener("pointerup", function (e) {
-		tstDisp.style.background = "white";
-		});
-	scrolCont.addEventListener("pointercancel", function (e) {
-		tstDisp1.style.background = "white";
-		});
-	
-	
-
-		let slide = scrolCont.querySelectorAll(".cont>*");
+		let slide = scrolCont.querySelectorAll(".hScrol>.scrolCont>*");
 		let arrLeft = hScrol[i].querySelector(".leftArr");
 		let arrRight = hScrol[i].querySelector(".rightArr");
 
-		if (arrRight) {
-			arrRight.onclick = function(){
-				let contWidth = scrolCont.offsetWidth;	
-				let contCoord = scrolCont.getBoundingClientRect().left;	
+		if (arrRight) {	arrRight.onclick = function(){slidFlag=false;stepScrollLeft();}	}
+		if (arrLeft) {	arrLeft.onclick = function(){slidFlag=false;stepScrollRight();}	}
+
+			function stepScrollLeft() {
+				slidFlag=false;
 				let sclLeft = scrolCont.scrollLeft; 
-				let contLeft = contCoord-sclLeft;
-				let scrlPlus = sclLeft + contWidth; 
-				let scrolRez;
-				
+				let contWidth = scrolCont.offsetWidth;	
+				let rightSide = sclLeft + contWidth; 
+				let contCoord = scrolCont.getBoundingClientRect().left;	
+				let tmp1 = sclLeft - contCoord;
+				let scrolRez;				
 				for (let j = 0; j < slide.length; j++) {	
 					let slideCoord = slide[j].getBoundingClientRect().left;
-					scrolRez = (slideCoord-contLeft);
-					if(((scrolRez + slide[j].offsetWidth)-scrlPlus)>10){
-						break;}	}
+					scrolRez = (tmp1 + slideCoord);
+					if(((scrolRez + slide[j].offsetWidth)-rightSide)>5){	break;}	}
 				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-			}
-		}
+				setTimeout( function() {slidFlag=true;}, 1000);
+					}
 
-		if (arrLeft) {
-			arrLeft.onclick = function(){
-				let contWidth = scrolCont.offsetWidth;	
-				let contCoord = scrolCont.getBoundingClientRect().left;	
+
+			function stepScrollRight() {
+				slidFlag=false;
 				let sclLeft = scrolCont.scrollLeft; 
-				let contLeft = contCoord-sclLeft;
-				let scrlPlus = sclLeft; 
-				let scrolRez;
+				let contWidth = scrolCont.offsetWidth;	
+				let rightSide = sclLeft + contWidth; 
+				let contCoord = scrolCont.getBoundingClientRect().left;	
+				let tmp1 = sclLeft - contCoord;
+				let scrolRez;				
 				for (let j = (slide.length - 1); j >= 0; j--) {	
 					let slideCoord = slide[j].getBoundingClientRect().left;
-					scrolRez = (slideCoord-contLeft)-(contWidth-slide[j].offsetWidth);
-					if((scrlPlus-(slideCoord-contLeft))>5){
-						break;}	}
+					scrolRez = (tmp1 + slideCoord + slide[j].offsetWidth) - contWidth;
+					if((sclLeft - (tmp1 + slideCoord))>5){	break;}	}
 				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-			}
-		}
-
+				setTimeout( function() {slidFlag=true;}, 1000);
+					}
 
 }
 
@@ -119,7 +97,10 @@ for (let i = 0; i < videoFrame.length; i++) {
 		playButt.style.opacity = '0';
 		video.setAttribute('controls', 'controls');
 		video.play();}
+if(playButt){
 	playButt.onclick = function(){setVideoReady();}	}
+}
+
 
 
 let footSw=true;
@@ -210,43 +191,198 @@ for (let i = 0; i < goodCard.length; i++) {
 	goodSlid.after(indicPanl);
 	indicPanl.classList.add("indicPanl");
 	if (imgS.length>1){
+		
 		for (let i = 0; i < imgS.length; i++) {
 			let indic = document.createElement("div");
-			indicPanl.append(indic);}
-			
+			indicPanl.append(indic);	}
 		let indicS = indicPanl.querySelectorAll(".indicPanl>*");
-		indicS[0].classList.add("marked");
+		imgSwch(0);
 		
-				goodSlid.onclick = function(){
-			let onStep = goodSlid.scrollWidth / imgS.length;
-			let j = Math.round(goodSlid.scrollLeft / onStep);
-			
-			if(slidDir==true){
-//				slidDist=onStep*(j+1);
-				if(Math.abs(goodSlid.scrollLeft-(goodSlid.scrollWidth - goodSlid.offsetWidth))>20){
-					slidDist=onStep*(j+1);
+		function imgSwch(indx) {
+//			console.log('imgSwch  indx=' + indx + '    imgS ' + imgS.length);
+			for (let i = 0; i < imgS.length; i++) {
+				if(indx==i){
+					imgS[i].style.opacity = "1";
+					indicS[i].classList.add("marked");
 				}else{
-					slidDist=onStep*(j-1);
-					slidDir=false;
-				}
-			}else{
-//				slidDist=onStep*(j-1);
-				if(goodSlid.scrollLeft>20){
-					slidDist=onStep*(j-1);
-				}else{
-					slidDist=onStep*(j+1);
-					slidDir=true;
+					imgS[i].style.opacity = "0";
+					indicS[i].classList.remove("marked");
 				}
 			}
-			
-			goodSlid.scrollTo({left: slidDist, behavior: 'smooth'});	}
+		}
+		
+//=======================
+	let mousCoord;
+	let slIndex;
+	let alFlag=true;
+	let swStep;
+	let prntCoord;
 
-		function indSwch() {
-			let onStep = goodSlid.scrollWidth / imgS.length;
-			let j = Math.round(goodSlid.scrollLeft / onStep);
-			for (let i = 0; i < indicS.length; i++) {indicS[i].classList.remove("marked");}
-			indicS[j].classList.add("marked");	}
+	goodSlid.onmouseover = function(e){
+		prntCoord = goodSlid.getBoundingClientRect().left ;
+		mousCoord = e.clientX - prntCoord;
+		swStep = goodSlid.offsetWidth/imgS.length;
+		if (((this.offsetWidth/2)-mousCoord)>0){//заход слева
+			slIndex=0;
+//		console.log('заход слева prntCoord  ' + prntCoord +'   e.clientX '  + e.clientX);
+		}else{//заход справа
+			slIndex=(imgS.length - 1);
+//		console.log('заход справа prntCoord  ' + prntCoord +'   e.clientX ' + e.clientX);
+		}
+		imgSwch(slIndex);
+	}
 
-			goodSlid.addEventListener("scroll", indSwch);
+	goodSlid.onmousemove = function(e){
+		if(alFlag==true){
+			alFlag=false;
+			setTimeout( function() {alFlag=true;}, 200);
+			let clX = e.clientX - prntCoord;
+			if(clX>mousCoord){//движение вправо
+//				console.log('движение вправо  clX=' + clX);
+				if((clX-((slIndex+1)*swStep))>10){if(slIndex<(imgS.length-1)){	slIndex++;}	}
+			}else{//движение влево
+//				console.log('движение влево  clX=' + clX);
+				if(((slIndex*swStep)-clX)>10){	if(slIndex>0){	slIndex--;}	}}
+			imgSwch(slIndex);
+			mousCoord = clX;}	}
+
+	goodSlid.onmouseout = function(e){imgSwch(0);}
 	}}
+
+
+let filtShow = document.querySelectorAll(".filtShow");
+for (let i = 0; i < filtShow.length; i++) {
+	let filtBut = filtShow[i].querySelector(".filtBut");
+	let button = filtBut.querySelectorAll("button");
+	let cont = filtShow[i].querySelector(".gcCont");
+	let aCard = cont.querySelectorAll(".gcCont>*");
+	let fitArr = [];
+
+	function applFilt(indx) {
+		if(button[indx].classList.contains("marked")){
+			button[indx].classList.remove("marked");
+			for (let l = 0; l < aCard.length; l++) {aCard[l].style.display=null;}
+		}else{
+			for (let j = 0; j < button.length; j++) {
+				button[j].classList.remove("marked");	}
+			button[indx].classList.add("marked");
+			for (let l = 0; l < aCard.length; l++) {
+				aCard[l].style.display="none";
+				for (let clName of aCard[l].classList) {
+					if(clName==fitArr[indx]){
+						aCard[l].style.display=null;
+						break;}	}}}}
+
+	for (let i = 0; i < button.length; i++) {
+		for (let clName of button[i].classList) {
+			if((clName.indexOf('filt'))==0){fitArr.push(clName);}	}
+		button[i].onclick = function(){	applFilt(i);}	}
+
+	applFilt(0);
+}
+
+let vSlShift;
+let startShift;
+let dragFlag=false;
+let timeFlag=true;
+
+let videoFBk = document.querySelectorAll(".videoFBk");
+for (let i = 0; i < videoFBk.length; i++) {
+	let cont = videoFBk[i].querySelector(".cont");
+	let videoFrame = cont.querySelectorAll(".videoFrame");
+
+	for (let i = 0; i < videoFrame.length; i++) {
+		let iiFrame = videoFrame[i].querySelector("iframe");
+		let glaSS = videoFrame[i].querySelector(".glaSS");
+		let remGlas;
+
+		glaSS.onmousedown = function(e){
+			e.preventDefault();
+			clearTimeout(remGlas);
+			vSlShift=e.pageX;
+			startShift=vSlShift;
+			dragFlag=true;
+			}
+
+		document.addEventListener("mousemove", function (e) {
+			if(dragFlag==true){
+				cont.scrollLeft=cont.scrollLeft-(e.pageX-vSlShift);
+				vSlShift=e.pageX;
+			}
+		});
+		
+		glaSS.addEventListener("mousemove", function (e) {
+			if(dragFlag==false){
+				remGlas = setTimeout( function() {glaSS.style.display='none';}, 1000);
+				setTimeout( function() {glaSS.style.display=null;}, 3000);
+			}
+		});
+		
+		glaSS.addEventListener("mouseout", function (e) {
+			dragFlag=false;
+			clearTimeout(remGlas);
+			if((Math.abs(vSlShift-startShift))<10){
+				glaSS.style.display='none';
+				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+			}else{
+				glaSS.style.display=null;
+			}
+		});
+
+		glaSS.addEventListener("mouseleave", function (e) {
+			dragFlag=false;
+			clearTimeout(remGlas);
+			if((Math.abs(vSlShift-startShift))<10){
+				glaSS.style.display='none';
+				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+			}else{
+				glaSS.style.display=null;
+			}
+		});
+
+		glaSS.addEventListener("mouseup", function (e) {
+			dragFlag=false;
+			clearTimeout(remGlas);
+			if((Math.abs(vSlShift-startShift))<10){
+				glaSS.style.display='none';
+				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+			}else{
+				glaSS.style.display=null;
+			}
+			
+		});
+
+	}
+}	
+	
+
+
+
+/*
+	cont.addEventListener("mousedown", function (e) {
+		vSlShift=e.clientX;
+		dragFlag=true;
+		console.log('mousedown ' + e.clientX);
+	});
+	cont.addEventListener("mousemove", function (e) {
+		if(dragFlag==true){
+			console.log('смещение:' + (e.clientX-vSlShift) + '   scrollLeft:' + cont.scrollLeft);
+			cont.scrollLeft=cont.scrollLeft-(e.clientX-vSlShift);
+//			cont.scrollLeft=200;
+			console.log('scrollLeft:' + cont.scrollLeft);
+		}
+	});
+	cont.addEventListener("mouseup", function (e) {
+		dragFlag=false;
+		console.log("mouseup");
+	});
+	cont.addEventListener("mouseout", function (e) {
+		dragFlag=false;
+		console.log("mouseOut");
+	});
+	cont.addEventListener("click", function (e) {
+		dragFlag=false;
+		console.log("click");
+	});
+*/	
 
