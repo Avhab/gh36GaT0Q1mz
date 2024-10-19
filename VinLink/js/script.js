@@ -1,4 +1,3 @@
-
 let blur = document.querySelector(".blur");
 let burger = document.querySelector(".burger");
 let burgerMenu = document.querySelector(".burgerMenu");
@@ -291,7 +290,8 @@ for (let i = 0; i < filtShow.length; i++) {
 
 function videoSwap() {
 	let videoFBk = document.querySelectorAll(".videoFBk");
-	if(window.innerWidth<950){
+	let isTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
+	if(isTouch==true){
 		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.add("mobNarr");}
 	}else{
 		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.remove("mobNarr");
