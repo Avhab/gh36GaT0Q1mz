@@ -290,88 +290,49 @@ for (let i = 0; i < filtShow.length; i++) {
 }
 
 function videoSwap() {
-	
-	let vSlShift;
-	let startShift;
-	let dragFlag=false;
-	let timeFlag=true;
 	let videoFBk = document.querySelectorAll(".videoFBk");
-
 	if(window.innerWidth<950){
-		for (let i = 0; i < videoFBk.length; i++) {
-			videoFBk[i].classList.add("mobNarr");
-		}
+		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.add("mobNarr");}
 	}else{
-		for (let i = 0; i < videoFBk.length; i++) {
-			videoFBk[i].classList.remove("mobNarr");
-			let cont = videoFBk[i].querySelector(".cont");
-			let videoFrame = cont.querySelectorAll(".videoFrame");
-
-			for (let i = 0; i < videoFrame.length; i++) {
-				let iiFrame = videoFrame[i].querySelector("iframe");
-				let glaSS = videoFrame[i].querySelector(".glaSS");
-				let remGlas;
-
+		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.remove("mobNarr");
+			let vSlShift;
+			let dragFlag=false;
+			let scrolCont = videoFBk[i].querySelector(".scrolCont");
+			let glaSS = videoFBk[i].querySelector(".glaSS");
 				glaSS.onmousedown = function(e){
 					e.preventDefault();
-					clearTimeout(remGlas);
 					vSlShift=e.pageX;
 					startShift=vSlShift;
-					dragFlag=true;
-					}
-
+					dragFlag=true;		}
 				document.addEventListener("mousemove", function (e) {
 					if(dragFlag==true){
-						cont.scrollLeft=cont.scrollLeft-(e.pageX-vSlShift);
-						vSlShift=e.pageX;
-					}
-				});
-				
-				glaSS.addEventListener("mousemove", function (e) {
-					if(dragFlag==false){
-						remGlas = setTimeout( function() {glaSS.style.display='none';}, 1000);
-						setTimeout( function() {glaSS.style.display=null;}, 3000);
-					}
-				});
-				
-				glaSS.addEventListener("mouseout", function (e) {
-					dragFlag=false;
-					clearTimeout(remGlas);
-					if((Math.abs(vSlShift-startShift))<10){
-						glaSS.style.display='none';
-						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-					}else{
-						glaSS.style.display=null;
-					}
-				});
+						scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
+						vSlShift=e.pageX;	}	});
+				document.addEventListener("mouseup", function (e) {	dragFlag=false;	});		}}}
 
-				glaSS.addEventListener("mouseleave", function (e) {
-					dragFlag=false;
-					clearTimeout(remGlas);
-					if((Math.abs(vSlShift-startShift))<10){
-						glaSS.style.display='none';
-						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-					}else{
-						glaSS.style.display=null;
-					}
-				});
+catalSwap();
 
-				glaSS.addEventListener("mouseup", function (e) {
-					dragFlag=false;
-					clearTimeout(remGlas);
-					if((Math.abs(vSlShift-startShift))<10){
-						glaSS.style.display='none';
-						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-					}else{
-						glaSS.style.display=null;
-					}
-					
-				});
-
+function catalSwap() {
+	let cataLog = document.querySelectorAll(".cataLog");
+	for (let i = 0; i < cataLog.length; i++) {
+		let vSlShift;
+		let dragFlag=false;
+		let scrolCont = cataLog[i].querySelector(".cataLog>.cont");
+		
+			scrolCont.onmousedown = function(e){
+				e.preventDefault();
+				vSlShift=e.pageX;
+				startShift=vSlShift;
+				dragFlag=true;
 			}
-		}
+
+			document.addEventListener("mousemove", function (e) {
+				if(dragFlag==true){
+					scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
+					vSlShift=e.pageX;	}	});
+
+			document.addEventListener("mouseup", function (e) {	dragFlag=false;	});
 	}
-	
 }
 
 
