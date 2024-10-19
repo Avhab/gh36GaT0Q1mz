@@ -263,7 +263,7 @@ display:flex;justify-content:start;flex-wrap:nowrap;gap:0.5rem;align-items:cente
 .videoFBk .slideArr {width:200px;margin:0 auto 1rem auto;}
 .videoFrame {position:relative;}
 .videoFrame .glaSS {position:absolute;z-index:10;left:0;top:0;width:100%;height:100%;}
-
+.videoFBk.mobNarr .glaSS {display:none;}
 
 .autoNews {font-weight:300;color:#090909;}
 .autoNews .cont>* {flex-basis:47%;}
