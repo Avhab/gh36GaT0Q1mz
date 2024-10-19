@@ -158,13 +158,21 @@ function footerSwap() {
 	}
 }
 
+
 if (window.addEventListener) {
-  window.addEventListener('resize', footerSwap);
+	window.addEventListener('resize', function (e) {
+		footerSwap();
+		videoSwap();
+	});
 } else if (window.attachEvent) {
-  window.attachEvent('onresize', footerSwap);
+	window.attachEvent('onresize', function (e) {
+		footerSwap();
+		videoSwap();
+	});
 }
 
 footerSwap();
+videoSwap();
 
 let goodCard = document.querySelectorAll(".goodCard");
 for (let i = 0; i < goodCard.length; i++) {
@@ -281,108 +289,89 @@ for (let i = 0; i < filtShow.length; i++) {
 	applFilt(0);
 }
 
-let vSlShift;
-let startShift;
-let dragFlag=false;
-let timeFlag=true;
-
-let videoFBk = document.querySelectorAll(".videoFBk");
-for (let i = 0; i < videoFBk.length; i++) {
-	let cont = videoFBk[i].querySelector(".cont");
-	let videoFrame = cont.querySelectorAll(".videoFrame");
-
-	for (let i = 0; i < videoFrame.length; i++) {
-		let iiFrame = videoFrame[i].querySelector("iframe");
-		let glaSS = videoFrame[i].querySelector(".glaSS");
-		let remGlas;
-
-		glaSS.onmousedown = function(e){
-			e.preventDefault();
-			clearTimeout(remGlas);
-			vSlShift=e.pageX;
-			startShift=vSlShift;
-			dragFlag=true;
-			}
-
-		document.addEventListener("mousemove", function (e) {
-			if(dragFlag==true){
-				cont.scrollLeft=cont.scrollLeft-(e.pageX-vSlShift);
-				vSlShift=e.pageX;
-			}
-		});
-		
-		glaSS.addEventListener("mousemove", function (e) {
-			if(dragFlag==false){
-				remGlas = setTimeout( function() {glaSS.style.display='none';}, 1000);
-				setTimeout( function() {glaSS.style.display=null;}, 3000);
-			}
-		});
-		
-		glaSS.addEventListener("mouseout", function (e) {
-			dragFlag=false;
-			clearTimeout(remGlas);
-			if((Math.abs(vSlShift-startShift))<10){
-				glaSS.style.display='none';
-				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-			}else{
-				glaSS.style.display=null;
-			}
-		});
-
-		glaSS.addEventListener("mouseleave", function (e) {
-			dragFlag=false;
-			clearTimeout(remGlas);
-			if((Math.abs(vSlShift-startShift))<10){
-				glaSS.style.display='none';
-				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-			}else{
-				glaSS.style.display=null;
-			}
-		});
-
-		glaSS.addEventListener("mouseup", function (e) {
-			dragFlag=false;
-			clearTimeout(remGlas);
-			if((Math.abs(vSlShift-startShift))<10){
-				glaSS.style.display='none';
-				remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
-			}else{
-				glaSS.style.display=null;
-			}
-			
-		});
-
-	}
-}	
+function videoSwap() {
 	
+	let vSlShift;
+	let startShift;
+	let dragFlag=false;
+	let timeFlag=true;
+	let videoFBk = document.querySelectorAll(".videoFBk");
 
-
-
-/*
-	cont.addEventListener("mousedown", function (e) {
-		vSlShift=e.clientX;
-		dragFlag=true;
-		console.log('mousedown ' + e.clientX);
-	});
-	cont.addEventListener("mousemove", function (e) {
-		if(dragFlag==true){
-			console.log('смещение:' + (e.clientX-vSlShift) + '   scrollLeft:' + cont.scrollLeft);
-			cont.scrollLeft=cont.scrollLeft-(e.clientX-vSlShift);
-//			cont.scrollLeft=200;
-			console.log('scrollLeft:' + cont.scrollLeft);
+	if(window.innerWidth<950){
+		for (let i = 0; i < videoFBk.length; i++) {
+			videoFBk[i].classList.add("mobNarr");
 		}
-	});
-	cont.addEventListener("mouseup", function (e) {
-		dragFlag=false;
-		console.log("mouseup");
-	});
-	cont.addEventListener("mouseout", function (e) {
-		dragFlag=false;
-		console.log("mouseOut");
-	});
-	cont.addEventListener("click", function (e) {
-		dragFlag=false;
-		console.log("click");
-	});
-*/	
+	}else{
+		for (let i = 0; i < videoFBk.length; i++) {
+			videoFBk[i].classList.remove("mobNarr");
+			let cont = videoFBk[i].querySelector(".cont");
+			let videoFrame = cont.querySelectorAll(".videoFrame");
+
+			for (let i = 0; i < videoFrame.length; i++) {
+				let iiFrame = videoFrame[i].querySelector("iframe");
+				let glaSS = videoFrame[i].querySelector(".glaSS");
+				let remGlas;
+
+				glaSS.onmousedown = function(e){
+					e.preventDefault();
+					clearTimeout(remGlas);
+					vSlShift=e.pageX;
+					startShift=vSlShift;
+					dragFlag=true;
+					}
+
+				document.addEventListener("mousemove", function (e) {
+					if(dragFlag==true){
+						cont.scrollLeft=cont.scrollLeft-(e.pageX-vSlShift);
+						vSlShift=e.pageX;
+					}
+				});
+				
+				glaSS.addEventListener("mousemove", function (e) {
+					if(dragFlag==false){
+						remGlas = setTimeout( function() {glaSS.style.display='none';}, 1000);
+						setTimeout( function() {glaSS.style.display=null;}, 3000);
+					}
+				});
+				
+				glaSS.addEventListener("mouseout", function (e) {
+					dragFlag=false;
+					clearTimeout(remGlas);
+					if((Math.abs(vSlShift-startShift))<10){
+						glaSS.style.display='none';
+						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+					}else{
+						glaSS.style.display=null;
+					}
+				});
+
+				glaSS.addEventListener("mouseleave", function (e) {
+					dragFlag=false;
+					clearTimeout(remGlas);
+					if((Math.abs(vSlShift-startShift))<10){
+						glaSS.style.display='none';
+						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+					}else{
+						glaSS.style.display=null;
+					}
+				});
+
+				glaSS.addEventListener("mouseup", function (e) {
+					dragFlag=false;
+					clearTimeout(remGlas);
+					if((Math.abs(vSlShift-startShift))<10){
+						glaSS.style.display='none';
+						remGlas = setTimeout( function() {glaSS.style.display=null;}, 1500);	
+					}else{
+						glaSS.style.display=null;
+					}
+					
+				});
+
+			}
+		}
+	}
+	
+}
+
 
