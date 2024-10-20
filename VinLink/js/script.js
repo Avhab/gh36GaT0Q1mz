@@ -161,17 +161,14 @@ function footerSwap() {
 if (window.addEventListener) {
 	window.addEventListener('resize', function (e) {
 		footerSwap();
-		videoSwap();
 	});
 } else if (window.attachEvent) {
 	window.attachEvent('onresize', function (e) {
 		footerSwap();
-		videoSwap();
 	});
 }
 
 footerSwap();
-videoSwap();
 
 let goodCard = document.querySelectorAll(".goodCard");
 for (let i = 0; i < goodCard.length; i++) {
@@ -206,7 +203,6 @@ for (let i = 0; i < goodCard.length; i++) {
 		imgSwch(0);
 		
 		function imgSwch(indx) {
-//			console.log('imgSwch  indx=' + indx + '    imgS ' + imgS.length);
 			for (let i = 0; i < imgS.length; i++) {
 				if(indx==i){
 					imgS[i].style.opacity = "1";
@@ -298,19 +294,35 @@ function videoSwap() {
 			let vSlShift;
 			let dragFlag=false;
 			let scrolCont = videoFBk[i].querySelector(".scrolCont");
-			let glaSS = videoFBk[i].querySelector(".glaSS");
-				glaSS.onmousedown = function(e){
-					e.preventDefault();
-					vSlShift=e.pageX;
-					startShift=vSlShift;
-					dragFlag=true;		}
-				document.addEventListener("mousemove", function (e) {
-					if(dragFlag==true){
-						scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
-						vSlShift=e.pageX;	}	});
-				document.addEventListener("mouseup", function (e) {	dragFlag=false;	});		}}}
+			scrolCont.onmousedown = function(e){
+				e.preventDefault();
+				vSlShift=e.pageX;
+				startShift=vSlShift;
+				dragFlag=true;		}
+			document.addEventListener("mousemove", function (e) {
+				if(dragFlag==true){
+					scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
+					vSlShift=e.pageX;	}	});
+			document.addEventListener("mouseup", function (e) {	dragFlag=false;	});
+			let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
+			for (let i = 0; i < videoFrame.length; i++) {
+				let coordX;
+				let coordY;
+				let frzFlag=false;
+				videoFrame[i].classList.add("glassed");
+				videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
+				videoFrame[i].onmouseup = function(e){
+					if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
+						frzFlag=false;
+						setTimeout( function() {frzFlag=true;}, 300);
+						this.classList.remove("glassed");}	}
+				videoFrame[i].onmouseout = function(e){
+					console.log('onmouseout');
+					if(frzFlag==true){
+						this.classList.add("glassed");	}	}	}	}}}
 
-catalSwap();
+videoSwap();
+
 
 function catalSwap() {
 	let cataLog = document.querySelectorAll(".cataLog");
@@ -335,4 +347,4 @@ function catalSwap() {
 	}
 }
 
-
+catalSwap();
