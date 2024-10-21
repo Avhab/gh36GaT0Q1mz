@@ -36,56 +36,107 @@ if(blur&&burger&&burgerMenu){
 					burgerMenu.style.display=null;
 				}, 300);}});}
 
+let itTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
+
 
 let hScrol = document.querySelectorAll(".hScrol");
 for (let i = 0; i < hScrol.length; i++) {
 	let scrolCont = hScrol[i].querySelector(".hScrol>.scrolCont");
-	let slidFlag=true;
 	let dirFlag;
 	let sCoord = scrolCont.scrollLeft; 
 
-		let slide = scrolCont.querySelectorAll(".hScrol>.scrolCont>*");
-		let arrLeft = hScrol[i].querySelector(".leftArr");
-		let arrRight = hScrol[i].querySelector(".rightArr");
+	let slide = scrolCont.querySelectorAll(".hScrol>.scrolCont>*");
+	let arrLeft = hScrol[i].querySelector(".leftArr");
+	let arrRight = hScrol[i].querySelector(".rightArr");
 
-		if (arrRight) {	arrRight.onclick = function(){slidFlag=false;stepScrollLeft();}	}
-		if (arrLeft) {	arrLeft.onclick = function(){slidFlag=false;stepScrollRight();}	}
+	if (arrRight) {	arrRight.onclick = function(){stepScrollLeft();}	}
+	if (arrLeft) {	arrLeft.onclick = function(){stepScrollRight();}	}
 
-			function stepScrollLeft() {
-				slidFlag=false;
-				let sclLeft = scrolCont.scrollLeft; 
-				let contWidth = scrolCont.offsetWidth;	
-				let rightSide = sclLeft + contWidth; 
-				let contCoord = scrolCont.getBoundingClientRect().left;	
-				let tmp1 = sclLeft - contCoord;
-				let scrolRez;				
-				for (let j = 0; j < slide.length; j++) {	
-					let slideCoord = slide[j].getBoundingClientRect().left;
-					scrolRez = (tmp1 + slideCoord);
-					if(((scrolRez + slide[j].offsetWidth)-rightSide)>5){	break;}	}
-				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-				setTimeout( function() {slidFlag=true;}, 1000);
-					}
+	function stepScrollLeft() {
+		let sclLeft = scrolCont.scrollLeft; 
+		let contWidth = scrolCont.offsetWidth;
+		let contLeft = scrolCont.offsetLeft;
+		let scrolRez;
+		for (let j = 0; j < slide.length; j++) {
+			scrolRez = slide[j].offsetLeft-contLeft;
+			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}
+			if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft+contWidth)){break;}
+		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+	}
 
+	function stepScrollRight() {
+		let sclLeft = scrolCont.scrollLeft; 
+		let contWidth = scrolCont.offsetWidth;
+		let contLeft = scrolCont.offsetLeft;
+		let scrolRez;
+		for (let j = (slide.length - 1); j >= 0; j--) {
+			scrolRez = ((slide[j].offsetLeft-contLeft)+slide[j].offsetWidth)-contWidth;
+			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
+			if((slide[j].offsetLeft-contLeft)<sclLeft){break;}
+		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+	}
 
-			function stepScrollRight() {
-				slidFlag=false;
-				let sclLeft = scrolCont.scrollLeft; 
-				let contWidth = scrolCont.offsetWidth;	
-				let rightSide = sclLeft + contWidth; 
-				let contCoord = scrolCont.getBoundingClientRect().left;	
-				let tmp1 = sclLeft - contCoord;
-				let scrolRez;				
-				for (let j = (slide.length - 1); j >= 0; j--) {	
-					let slideCoord = slide[j].getBoundingClientRect().left;
-					scrolRez = (tmp1 + slideCoord + slide[j].offsetWidth) - contWidth;
-					if((sclLeft - (tmp1 + slideCoord))>5){	break;}	}
-				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-				setTimeout( function() {slidFlag=true;}, 1000);
-					}
-
+//===========
+	if(!itTouchDevice){touchSwap(scrolCont, slide);	}
+//	touchSwap(scrolCont, slide);
 }
 
+
+function touchSwap(scrolCont, slide) {
+	let mouseShift;
+	let dragFlag=false;
+	let inerthPoint;
+	let inerthDif=0;
+	
+	function mDown(e) {
+		e.preventDefault();
+		mouseShift=e.pageX;
+		dragFlag=true;
+		inerthPoint=e.pageX;
+		inerthDif=0;	}
+	function mMove(e) {
+		if(dragFlag==true){
+			scrolCont.scrollLeft=scrolCont.scrollLeft+(mouseShift-e.pageX);
+			mouseShift=e.pageX;
+			inerthDif = e.pageX - inerthPoint;
+			inerthPoint=e.pageX;
+		}	}
+	function mUp(e) {
+		dragFlag=false;
+		let ineShft = inerthDif*20;
+		let sclLeft = scrolCont.scrollLeft; 
+		let contWidth = scrolCont.offsetWidth;
+		let contLeft = scrolCont.offsetLeft;
+		let scrolRez;
+		if(inerthDif<0){
+			for (let j = 0; j < slide.length; j++) {
+				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
+				if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
+				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-ineShft+contWidth)){break;}	}
+			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+		}
+		if(inerthDif>0){
+			for (let j = (slide.length - 1); j >= 0; j--) {
+				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-ineShft)){break;}
+				scrolRez = slide[j].offsetLeft-contLeft;
+				if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}	}
+			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+		}
+		inerthDif=0;	}
+
+	if(itTouchDevice==true){
+		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
+		document.addEventListener("pointermove", function (e) {mMove(e);});
+		document.addEventListener("pointerout", function (e) {mUp(e);});
+	}else{
+		scrolCont.onmousedown = function(e){mDown(e);}
+		document.addEventListener("mousemove", function (e) {mMove(e);});
+		document.addEventListener("mouseup", function (e) {mUp(e);});
+	}
+		
+}
 
 
 let videoFrame = document.querySelectorAll(".videoFrame");
@@ -99,6 +150,39 @@ for (let i = 0; i < videoFrame.length; i++) {
 if(playButt){
 	playButt.onclick = function(){setVideoReady();}	}
 }
+
+function videoSwap() {
+	let videoFBk = document.querySelectorAll(".videoFBk");
+	for (let i = 0; i < videoFBk.length; i++) {
+		let mouseShift;
+		let dragFlag=false;
+		let scrolCont = videoFBk[i].querySelector(".scrolCont");
+		let slide = scrolCont.querySelectorAll(".videoFrame");
+		if(itTouchDevice==true){
+			videoFBk[i].classList.add("mobNarr");
+		}else{
+			videoFBk[i].classList.remove("mobNarr");
+			let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
+			for (let i = 0; i < videoFrame.length; i++) {
+				let coordX;
+				let coordY;
+				let frzFlag=false;
+				videoFrame[i].classList.add("glassed");
+				videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
+				videoFrame[i].onmouseup = function(e){
+					if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
+						frzFlag=false;
+						setTimeout( function() {frzFlag=true;}, 300);
+						this.classList.remove("glassed");}	}
+				videoFrame[i].onmouseout = function(e){
+					if(frzFlag==true){
+						this.classList.add("glassed");	}	}	
+			}
+			touchSwap(scrolCont, slide);
+		}}}
+
+videoSwap();
+
 
 
 
@@ -283,68 +367,3 @@ for (let i = 0; i < filtShow.length; i++) {
 
 	applFilt(0);
 }
-
-function videoSwap() {
-	let videoFBk = document.querySelectorAll(".videoFBk");
-	let isTouch = "ontouchstart" in window || navigator.msMaxTouchPoints;
-	if(isTouch==true){
-		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.add("mobNarr");}
-	}else{
-		for (let i = 0; i < videoFBk.length; i++) {	videoFBk[i].classList.remove("mobNarr");
-			let vSlShift;
-			let dragFlag=false;
-			let scrolCont = videoFBk[i].querySelector(".scrolCont");
-			scrolCont.onmousedown = function(e){
-				e.preventDefault();
-				vSlShift=e.pageX;
-				startShift=vSlShift;
-				dragFlag=true;		}
-			document.addEventListener("mousemove", function (e) {
-				if(dragFlag==true){
-					scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
-					vSlShift=e.pageX;	}	});
-			document.addEventListener("mouseup", function (e) {	dragFlag=false;	});
-			let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
-			for (let i = 0; i < videoFrame.length; i++) {
-				let coordX;
-				let coordY;
-				let frzFlag=false;
-				videoFrame[i].classList.add("glassed");
-				videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
-				videoFrame[i].onmouseup = function(e){
-					if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
-						frzFlag=false;
-						setTimeout( function() {frzFlag=true;}, 300);
-						this.classList.remove("glassed");}	}
-				videoFrame[i].onmouseout = function(e){
-					console.log('onmouseout');
-					if(frzFlag==true){
-						this.classList.add("glassed");	}	}	}	}}}
-
-videoSwap();
-
-
-function catalSwap() {
-	let cataLog = document.querySelectorAll(".cataLog");
-	for (let i = 0; i < cataLog.length; i++) {
-		let vSlShift;
-		let dragFlag=false;
-		let scrolCont = cataLog[i].querySelector(".cataLog>.cont");
-		
-			scrolCont.onmousedown = function(e){
-				e.preventDefault();
-				vSlShift=e.pageX;
-				startShift=vSlShift;
-				dragFlag=true;
-			}
-
-			document.addEventListener("mousemove", function (e) {
-				if(dragFlag==true){
-					scrolCont.scrollLeft=scrolCont.scrollLeft+(vSlShift-e.pageX);
-					vSlShift=e.pageX;	}	});
-
-			document.addEventListener("mouseup", function (e) {	dragFlag=false;	});
-	}
-}
-
-catalSwap();
