@@ -242,7 +242,6 @@ display:flex;justify-content:start;flex-wrap:nowrap;gap:0.5rem;align-items:cente
 }
 
 
-
 .scrolBrand {background:#EDEDED;padding:2rem 0;}
 .scrolBrand .cont {width:calc(100% - 22rem);gap:0;}
 .scrolBrand .cont>* {width:20%;flex-shrink:0;display:flex;justify-content:center;}
