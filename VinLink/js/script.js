@@ -36,7 +36,12 @@ if(blur&&burger&&burgerMenu){
 					burgerMenu.style.display=null;
 				}, 300);}});}
 
-let itTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
+let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
+
+//let slideArr = document.querySelectorAll(".slideArr");
+//if(isTouchDevice==true){for (let i = 0; i < slideArr.length; i++) {slideArr[i].style.display = "none";}}
+let slideArr = document.querySelector(".slideBanner .slideArr");
+if(isTouchDevice==true){slideArr.style.display = "none";}
 
 
 let hScrol = document.querySelectorAll(".hScrol");
@@ -60,7 +65,7 @@ for (let i = 0; i < hScrol.length; i++) {
 		for (let j = 0; j < slide.length; j++) {
 			scrolRez = slide[j].offsetLeft-contLeft;
 			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}
-			if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft+contWidth)){break;}
+			if((((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)-(sclLeft+contWidth))>5){break;}
 		}
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
@@ -73,14 +78,14 @@ for (let i = 0; i < hScrol.length; i++) {
 		for (let j = (slide.length - 1); j >= 0; j--) {
 			scrolRez = ((slide[j].offsetLeft-contLeft)+slide[j].offsetWidth)-contWidth;
 			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
-			if((slide[j].offsetLeft-contLeft)<sclLeft){break;}
+			if((sclLeft-(slide[j].offsetLeft-contLeft))>5){break;}
 		}
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
 
 //===========
-	if(!itTouchDevice){touchSwap(scrolCont, slide);	}
-//	touchSwap(scrolCont, slide);
+//	if(!isTouchDevice){touchSwap(scrolCont, slide);	}
+	touchSwap(scrolCont, slide);
 }
 
 
@@ -126,10 +131,23 @@ function touchSwap(scrolCont, slide) {
 		}
 		inerthDif=0;	}
 
-	if(itTouchDevice==true){
+	if(isTouchDevice==true){
+		/*
 		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
+		
+		console.log("isTouchDevice");
+		scrolCont.onpointerenter = function (e) {
+			e.preventDefault();
+			console.log("pointerenter");}
+		scrolCont.onpointerdown = function (e) {
+			e.preventDefault();
+			console.log("pointerdown");}
+		scrolCont.onpointermove = function (e) {
+			e.preventDefault();
+			console.log("pointermove");}
+		*/
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
 		document.addEventListener("mousemove", function (e) {mMove(e);});
@@ -158,7 +176,7 @@ function videoSwap() {
 		let dragFlag=false;
 		let scrolCont = videoFBk[i].querySelector(".scrolCont");
 		let slide = scrolCont.querySelectorAll(".videoFrame");
-		if(itTouchDevice==true){
+		if(isTouchDevice==true){
 			videoFBk[i].classList.add("mobNarr");
 		}else{
 			videoFBk[i].classList.remove("mobNarr");
