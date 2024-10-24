@@ -198,9 +198,13 @@ padding-bottom:1.7rem;margin-bottom:2rem;position:relative;display:block;width:1
 .catalogCat .cont {column-gap:1.95%;row-gap:2rem;}
 .catalogCat .cont>* {width:32%;}
 }
+@media (max-width:800px) {
+.catalogCat .cont {justify-content:center;column-gap:4%;row-gap:2rem;}
+.catalogCat .cont>* {max-width:280px;width:47%;min-height:247px;}
+}
 @media (max-width:700px) {
-.catalogCat .cont {column-gap:2%;row-gap:2rem;}
-.catalogCat .cont>* {width:49%;min-height:247px;}
+.cataLog .gcCont {gap:35px;}
+.catalogCat .cont>* {max-width:220px;}
 .catalogCat .cont>* .Tit {font-size:16px;padding-bottom:15px;margin-bottom:20px;}
 .catalogCat .cont>* li {font-size:14px;line-height:14px;margin-bottom:10px;}
 }
@@ -413,10 +417,10 @@ background-position:center center;background-repeat:no-repeat;background-size:co
 .findMenu form .findOpt{font-size:1.125rem;}
 .findMenu input[type='checkbox']{transform:scale(1.2);}
 .findMenu form {padding:8px 8px 8px 18px;}
-.slideBanner {margin-top:25px;}
+.slideBanner {margin-top:25px;padding:0;}
 .slideBanner .Tit {font-size:18px;font-weight:400;line-height: 25px;}
 .slideBanner .subTit {font-size:13px;}
-.slideBanner .cont>div {height:174px;}
+.slideBanner .cont>div {width:408px;height:174px;}
 .slideBanner .buttnB {width:113px;height:24px;font-weight:400;font-size:8px;}
 .videoFBk h1 {margin-bottom:23px;}
 .autoNews .buttn {margin:22px auto;}
