@@ -113,7 +113,9 @@ background:white;padding:2rem;box-sizing:border-box;}
 .burgerMenu .headMenu a:hover {background:#eee;}
 
 .findMenu {align-items:stretch;margin-bottom:4rem;}
-.findMenu form {border:1px solid #000000;border-radius:0.94rem;flex-grow:3;padding:0.3rem;}
+.findMenu form {border:1px solid #000000;border-radius:0.94rem;flex-grow:3;padding:0 5px 0 15px;height:47px;}
+.findMenu .buttn {height:47px;}
+
 .findMenu form {font-size:1.25rem;}
 .findMenu form .findOpt{font-size:1.125rem;}
 .findMenu input {border:none;background:transparent;font-size:1.25rem;}
@@ -412,16 +414,16 @@ background-position:center center;background-repeat:no-repeat;background-size:co
 
 @media (max-width:700px) {
 .buttn.buttnB {min-width:100px;}
-
 .findMenu form .findOpt{font-size:1.25rem;}
 .findMenu form .findOpt{font-size:1.125rem;}
 .findMenu input[type='checkbox']{transform:scale(1.2);}
-.findMenu form {padding:8px 8px 8px 18px;}
+.findMenu form {padding:0 8px 0 18px;height:42px;}
 .slideBanner {margin-top:25px;padding:0;}
 .slideBanner .Tit {font-size:18px;font-weight:400;line-height: 25px;}
 .slideBanner .subTit {font-size:13px;}
 .slideBanner .cont>div {width:408px;height:174px;}
 .slideBanner .buttnB {width:113px;height:24px;font-weight:400;font-size:8px;}
+.slideBanner .slideArr {display:none;}
 .videoFBk h1 {margin-bottom:23px;}
 .autoNews .buttn {margin:22px auto;}
 .autoNews .col2 {font-size:12px;}
