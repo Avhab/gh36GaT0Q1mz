@@ -203,7 +203,6 @@ videoSwap();
 
 
 
-
 let footSw=true;
 
 function footerSwap() {
@@ -211,16 +210,27 @@ function footerSwap() {
 		footSw=false;
 		setTimeout( function() {footSw=true;	}, 300);
 
-		let szFlag;
 		let footer = document.querySelector("footer");
+		let colmn1 = footer.querySelector(".colmn1");
+		let colmn2 = footer.querySelector(".colmn2");
+		let colmn3 = footer.querySelector(".colmn3");
+		let colmn4 = footer.querySelector(".colmn4");
+		let logo = footer.querySelector(".logo");
+		let wrkTim = footer.querySelector(".wrkTim");
+		let persCab = footer.querySelector(".persCab");
+		let szFlag;
 		if(window.innerWidth<950){
 			footer.classList.add("narr");
 			szFlag=true;
+			colmn2.prepend(wrkTim);
+			colmn2.prepend(logo);
 		}else{
 			footer.classList.remove("narr");
 			szFlag=false;
+			colmn1.prepend(logo);
+			persCab.after(wrkTim);
 		}
-		
+
 		let swap = footer.querySelectorAll(".swap");
 		for (let i = 0; i < swap.length; i++) {
 			let arrDown = swap[i].querySelector(".arrDown");
@@ -302,6 +312,11 @@ for (let i = 0; i < goodCard.length; i++) {
 			let indic = document.createElement("div");
 			indicPanl.append(indic);	}
 		let indicS = indicPanl.querySelectorAll(".indicPanl>*");
+		indicPanl.onmouseout = function(e){imgSwch(0);}
+		for (let i = 0; i < indicS.length; i++) {
+			indicS[i].onmousemove = function(e){
+				if(!this.classList.contains("marked")){imgSwch(i);}	}}
+		
 		imgSwch(0);
 		
 		function imgSwch(indx) {
