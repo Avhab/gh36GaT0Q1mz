@@ -252,12 +252,13 @@ function footerSwap() {
 							ul.style.transform = "scaleX(1)";
 							arrDown.style.transform = "scaleY( -1)";
 							 }, 30);
-						setTimeout( function() {flag = true; }, 350);}	}
+						setTimeout( function() {
+							flag = true; }, 350);}	}
 				document.addEventListener("click", function (e) {
 					if (flag == true) {
 						setTimeout( function() {flag = false; }, 30);
 						ul.style.opasity = "0";
-						ul.style.transform = "scaleY(0)"; 
+						ul.style.transform = "scaleY(0)";
 						arrDown.style.transform = "scaleY(1)";
 						setTimeout( function() {	ul.style.display=null;	}, 300);	}	});
 			}else{
