@@ -181,14 +181,14 @@ display:flex;justify-content:space-evenly;flex-wrap:nowrap;align-items:center;pa
 .cataLog .filtBut .buttn {font-size:15px;}
 
 .catalogCat h1 {text-align:center;}
-.catalogCat .cont {row-gap:3rem;}
-.catalogCat .cont>* {width:18.25rem;height:24.06rem;border:2px solid #000;border-radius:1rem;padding:1.75rem 1.2rem;
-display:flex;justify-content:start;flex-wrap:nowrap;align-items:start;gap:1rem;flex-direction:column;}
-.catalogCat .cont>* .Tit {font-weight:500;font-size:25px;color:#090909;
-margin-bottom:1.7rem;position:relative;display:block;width:100%;}
-.catalogCat .cont>* .Tit::after{content:"";position:absolute;bottom:-1.7rem;left:0;height:1px;width:100%;border-bottom:1px solid #000;}
+.catalogCat .cont {row-gap:3rem;align-items:stretch;}
+.catalogCat .cont>* {width:18.25rem;min-height:394px;border:2px solid #000;border-radius:1rem;padding:1.75rem 1.2rem;
+display:flex;justify-content:start;flex-wrap:nowrap;flex-direction:column;}
+.catalogCat .cont>* .Tit {font-weight:500;font-size:25px;color:#090909;white-space:nowrap;overflow:hidden;
+padding-bottom:1.7rem;margin-bottom:2rem;position:relative;display:block;width:100%;}
+.catalogCat .cont>* .Tit::after{content:"";position:absolute;bottom:0;left:0;height:1px;width:100%;border-bottom:1px solid #000;}
 .catalogCat .cont>* li {font-weight:400;font-size:20px;line-height: 24px;color:#090909;margin-bottom:14px;}
-.catalogCat .cont>* .buttn {margin-top:auto;}
+.catalogCat .cont>* .buttn {margin-top:auto;flex-shrink:0;}
 .catalogCat>.buttnB {width:282px;margin:3rem auto;}
 @media (max-width:1300px) {
 .catalogCat .cont {justify-content:start;column-gap:2.6%;row-gap:2rem;}
@@ -200,7 +200,9 @@ margin-bottom:1.7rem;position:relative;display:block;width:100%;}
 }
 @media (max-width:700px) {
 .catalogCat .cont {column-gap:2%;row-gap:2rem;}
-.catalogCat .cont>* {width:49%;}
+.catalogCat .cont>* {width:49%;min-height:247px;}
+.catalogCat .cont>* .Tit {font-size:16px;padding-bottom:15px;margin-bottom:20px;}
+.catalogCat .cont>* li {font-size:14px;line-height:14px;margin-bottom:10px;}
 }
 
 .goodCard {width:282px;height:415px;border:2px solid #000;border-radius:1rem;padding:23px 19px;flex-shrink:0;font-size:16px;
