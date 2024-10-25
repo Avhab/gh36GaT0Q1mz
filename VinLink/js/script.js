@@ -92,50 +92,56 @@ for (let i = 0; i < hScrol.length; i++) {
 function touchSwap(scrolCont, slide) {
 	let mouseShift;
 	let dragFlag=false;
-	let inerthPoint;
+	let stopFlag=true;
+	let prevPnt;
 	let inerthDif=0;
 	
 	function mDown(e) {
-		e.preventDefault();
-		mouseShift=e.pageX;
-		dragFlag=true;
-		inerthPoint=e.pageX;
-		inerthDif=0;	}
+		if(stopFlag==true){
+			console.log('mDown');
+			e.preventDefault();
+			mouseShift=e.pageX;
+			dragFlag=true;
+			prevPnt=e.pageX;
+			inerthDif=0;
+		}	}
 	function mMove(e) {
 		if(dragFlag==true){
 			scrolCont.scrollLeft=scrolCont.scrollLeft+(mouseShift-e.pageX);
 			mouseShift=e.pageX;
-			inerthDif = e.pageX - inerthPoint;
-			inerthPoint=e.pageX;
+			inerthDif = e.pageX - prevPnt;
+			prevPnt=e.pageX;
 		}	}
 	function mUp(e) {
 		if(dragFlag==true){
 			dragFlag=false;
+		stopFlag=false;
+		setTimeout( function() {stopFlag=true;}, 100);
 			let sclLeft = scrolCont.scrollLeft; 
 			let contWidth = scrolCont.offsetWidth;
 			let contLeft = scrolCont.offsetLeft;
-			let ineShft = inerthDif*20;
-			console.log(inerthDif);
+			let tmp = (scrolCont.scrollWidth/slide.length)/contWidth;
+			inerthDif=inerthDif*tmp*20;
 			let scrolRez;
 			if(inerthDif<0){
 				let j;
 				for (j = 0; j < slide.length; j++) {
 					scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
 					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez+3;}
-					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-ineShft+contWidth)){break;}	}
+					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
 				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 			}
 			if(inerthDif>0){
 				let j;
 				for (j = (slide.length - 1); j >= 0; j--) {
-					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-ineShft)){break;}
+					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
 					scrolRez = slide[j].offsetLeft-contLeft;
 					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez-3;}	}
 				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 			}
 			inerthDif=0;
 		}
-			}
+	}
 
 	if(isTouchDevice==true){
 		scrolCont.style.touchAction = "none";
@@ -144,8 +150,18 @@ function touchSwap(scrolCont, slide) {
 		document.addEventListener("pointerout", function (e) {mUp(e);});
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
+//		scrolCont.addEventListener("mousedown", function (e) {mDown(e);});
 		document.addEventListener("mousemove", function (e) {mMove(e);});
-		document.addEventListener("mouseup", function (e) {mUp(e);});
+		document.addEventListener("mouseup", function (e) {
+console.log('mouseup');
+			mUp(e);});
+/*
+		document.addEventListener("mouseleave", function (e) {
+console.log('mouseleave');
+			mUp(e);});
+		document.addEventListener("mouseout", function (e) {
+console.log('mouseout');
+			mUp(e);});*/
 	}
 }
 
