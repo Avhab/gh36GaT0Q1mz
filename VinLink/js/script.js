@@ -109,51 +109,44 @@ function touchSwap(scrolCont, slide) {
 			inerthPoint=e.pageX;
 		}	}
 	function mUp(e) {
-		dragFlag=false;
-		let ineShft = inerthDif*20;
-		let sclLeft = scrolCont.scrollLeft; 
-		let contWidth = scrolCont.offsetWidth;
-		let contLeft = scrolCont.offsetLeft;
-		let scrolRez;
-		if(inerthDif<0){
-			for (let j = 0; j < slide.length; j++) {
-				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
-				if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
-				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-ineShft+contWidth)){break;}	}
-			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+		if(dragFlag==true){
+			dragFlag=false;
+			let sclLeft = scrolCont.scrollLeft; 
+			let contWidth = scrolCont.offsetWidth;
+			let contLeft = scrolCont.offsetLeft;
+			let ineShft = inerthDif*20;
+			console.log(inerthDif);
+			let scrolRez;
+			if(inerthDif<0){
+				let j;
+				for (j = 0; j < slide.length; j++) {
+					scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
+					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez+3;}
+					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-ineShft+contWidth)){break;}	}
+				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+			}
+			if(inerthDif>0){
+				let j;
+				for (j = (slide.length - 1); j >= 0; j--) {
+					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-ineShft)){break;}
+					scrolRez = slide[j].offsetLeft-contLeft;
+					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez-3;}	}
+				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+			}
+			inerthDif=0;
 		}
-		if(inerthDif>0){
-			for (let j = (slide.length - 1); j >= 0; j--) {
-				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-ineShft)){break;}
-				scrolRez = slide[j].offsetLeft-contLeft;
-				if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}	}
-			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-		}
-		inerthDif=0;	}
+			}
 
 	if(isTouchDevice==true){
-		/*
+		scrolCont.style.touchAction = "none";
 		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
-		
-		console.log("isTouchDevice");
-		scrolCont.onpointerenter = function (e) {
-			e.preventDefault();
-			console.log("pointerenter");}
-		scrolCont.onpointerdown = function (e) {
-			e.preventDefault();
-			console.log("pointerdown");}
-		scrolCont.onpointermove = function (e) {
-			e.preventDefault();
-			console.log("pointermove");}
-		*/
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
 		document.addEventListener("mousemove", function (e) {mMove(e);});
 		document.addEventListener("mouseup", function (e) {mUp(e);});
 	}
-		
 }
 
 
@@ -196,8 +189,9 @@ function videoSwap() {
 					if(frzFlag==true){
 						this.classList.add("glassed");	}	}	
 			}
-			touchSwap(scrolCont, slide);
-		}}}
+		}
+		touchSwap(scrolCont, slide);
+	}}
 
 videoSwap();
 
