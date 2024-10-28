@@ -156,7 +156,7 @@ function touchSwap(scrolCont, slide) {
 //		scrolCont.addEventListener("mousedown", function (e) {mDown(e);});
 		document.addEventListener("mousemove", function (e) {mMove(e);});
 		document.addEventListener("mouseup", function (e) {
-console.log('mouseup');
+//console.log('mouseup');
 			mUp(e);});
 /*
 		document.addEventListener("mouseleave", function (e) {
@@ -188,27 +188,23 @@ function videoSwap() {
 		let dragFlag=false;
 		let scrolCont = videoFBk[i].querySelector(".scrolCont");
 		let slide = scrolCont.querySelectorAll(".videoFrame");
-		if(isTouchDevice==true){
-			videoFBk[i].classList.add("mobNarr");
-		}else{
-			videoFBk[i].classList.remove("mobNarr");
-			let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
-			for (let i = 0; i < videoFrame.length; i++) {
-				let coordX;
-				let coordY;
-				let frzFlag=false;
-				videoFrame[i].classList.add("glassed");
-				videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
-				videoFrame[i].onmouseup = function(e){
-					if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
-						frzFlag=false;
-						setTimeout( function() {frzFlag=true;}, 300);
-						this.classList.remove("glassed");}	}
-				videoFrame[i].onmouseout = function(e){
-					if(frzFlag==true){
-						this.classList.add("glassed");	}	}	
-			}
+		let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
+		for (let i = 0; i < videoFrame.length; i++) {
+			let coordX;
+			let coordY;
+			let frzFlag=false;
+			videoFrame[i].classList.add("glassed");
+			videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
+			videoFrame[i].onmouseup = function(e){
+				if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
+					frzFlag=false;
+					setTimeout( function() {frzFlag=true;}, 300);
+					this.classList.remove("glassed");}	}
+			videoFrame[i].onmouseout = function(e){
+				if(frzFlag==true){
+					this.classList.add("glassed");	}	}	
 		}
+
 		touchSwap(scrolCont, slide);
 	}}
 
@@ -245,44 +241,47 @@ function footerSwap() {
 		}
 
 		let swap = footer.querySelectorAll(".swap");
+		
 		for (let i = 0; i < swap.length; i++) {
 			let arrDown = swap[i].querySelector(".arrDown");
 			let ul = swap[i].querySelector("ul");
-			
+			let heigOn;
 			if(szFlag==true){
-				ul.style.display="none";
-				arrDown.style.transform = "scaleY(1)";
-				ul.style.transformOrigin = "center top";
 				ul.style.opasity = "0";
-				ul.style.transform = "scaleY(0)";
-				ul.style.transitionDuration = "0.3s";
+				ul.style.transitionDuration = "0.4s";
+				setTimeout( function() {
+					heigOn = ul.clientHeight;
+					ul.style.height = "0";
+					ul.style.marginTop = "0";
+				}, 200);
+				
 				let flag = false;
 				swap[i].onclick = function(){
 					if (flag == false) {
-						ul.style.display="block";
-						setTimeout( function() {
-							ul.style.opasity = "1";
-							ul.style.transform = "scaleX(1)";
-							arrDown.style.transform = "scaleY( -1)";
-							 }, 30);
-						setTimeout( function() {
-							flag = true; }, 350);}	}
+						ul.style.opasity = "1";
+						ul.style.height = heigOn + "px";
+						ul.style.marginTop = null;
+						arrDown.style.transform = "scaleY( -1)";
+						setTimeout( function() {flag = true; }, 200);}	}
+						
 				document.addEventListener("click", function (e) {
 					if (flag == true) {
-						setTimeout( function() {flag = false; }, 30);
+						setTimeout( function() {flag = false; }, 50);
 						ul.style.opasity = "0";
-						ul.style.transform = "scaleY(0)";
 						arrDown.style.transform = "scaleY(1)";
-						setTimeout( function() {	ul.style.display=null;	}, 300);	}	});
+						ul.style.height = "0";
+						ul.style.marginTop = "0";}	});
+						
 			}else{
-				ul.style.display="block";
+				ul.style.height = null;
+				ul.style.marginTop = null;
 				ul.style.opasity = "1";
-				ul.style.transform = "scaleX(1)";
 			}
 		}
 	}
 }
 
+let footSwapTime;
 
 if (window.addEventListener) {
 	window.addEventListener('resize', function (e) {
@@ -290,7 +289,7 @@ if (window.addEventListener) {
 	});
 } else if (window.attachEvent) {
 	window.attachEvent('onresize', function (e) {
-		footerSwap();
+//		if(!footSwapTime){footSwapTime = setTimeout( function() {footSwapTime=null;footerSwap();}, 200);}
 	});
 }
 
