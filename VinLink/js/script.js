@@ -98,16 +98,15 @@ function touchSwap(scrolCont, slide) {
 	
 	function mDown(e) {
 		if(stopFlag==true){
-//========
-//			e.preventDefault();
-			if(!isTouchDevice){e.preventDefault();}
-//========
+//console.log('mDown');
+			e.preventDefault();
 			mouseShift=e.pageX;
 			dragFlag=true;
 			prevPnt=e.pageX;
 			inerthDif=0;
 		}	}
 	function mMove(e) {
+//console.log('mMove');
 		if(dragFlag==true){
 			scrolCont.scrollLeft=scrolCont.scrollLeft+(mouseShift-e.pageX);
 			mouseShift=e.pageX;
@@ -115,6 +114,7 @@ function touchSwap(scrolCont, slide) {
 			prevPnt=e.pageX;
 		}	}
 	function mUp(e) {
+//console.log('mUp');
 		if(dragFlag==true){
 			dragFlag=false;
 		stopFlag=false;
@@ -147,14 +147,24 @@ function touchSwap(scrolCont, slide) {
 
 	if(isTouchDevice==true){
 		scrolCont.style.touchAction = "none";
-		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
+		scrolCont.onpointerdown = function(e){mDown(e);}
+//		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
 //		scrolCont.addEventListener("mousedown", function (e) {mDown(e);});
 		document.addEventListener("mousemove", function (e) {mMove(e);});
-		document.addEventListener("mouseup", function (e) {mUp(e);});
+		document.addEventListener("mouseup", function (e) {
+console.log('mouseup');
+			mUp(e);});
+/*
+		document.addEventListener("mouseleave", function (e) {
+console.log('mouseleave');
+			mUp(e);});
+		document.addEventListener("mouseout", function (e) {
+console.log('mouseout');
+			mUp(e);});*/
 	}
 }
 
@@ -299,15 +309,15 @@ for (let i = 0; i < goodCard.length; i++) {
 			setTimeout( function() {
 				like.classList.remove("step1");
 				like.classList.remove("step2");
-				}, 100);}	}
+				}, 100);
+		}
+	}
 
-	let slIndex;
-	let alFlag=true;
-	let swStep;
-	let parntCoord;
 	let goodSlid = goodCard[i].querySelector(".goodSlid");
 	let imgS = goodSlid.querySelectorAll(".goodSlid>*");
 	let indicPanl = document.createElement("div");
+	let slidDir = true;
+	let slidDist;
 	goodSlid.after(indicPanl);
 	indicPanl.classList.add("indicPanl");
 	if (imgS.length>1){
@@ -326,30 +336,52 @@ for (let i = 0; i < goodCard.length; i++) {
 		function imgSwch(indx) {
 			for (let i = 0; i < imgS.length; i++) {
 				if(indx==i){
-					slIndex=i;
 					imgS[i].style.opacity = "1";
 					indicS[i].classList.add("marked");
 				}else{
 					imgS[i].style.opacity = "0";
-					indicS[i].classList.remove("marked");}	}	}
+					indicS[i].classList.remove("marked");
+				}
+			}
+		}
 		
 //=======================
+	let mousCoord;
+	let slIndex;
+	let alFlag=true;
+	let swStep;
+	let prntCoord;
+
 	goodSlid.onmouseover = function(e){
-		parntCoord = goodSlid.getBoundingClientRect().left;
+		prntCoord = goodSlid.getBoundingClientRect().left ;
+		mousCoord = e.clientX - prntCoord;
 		swStep = goodSlid.offsetWidth/imgS.length;
-		alFlag=true;}
+		if (((this.offsetWidth/2)-mousCoord)>0){//заход слева
+			slIndex=0;
+//		console.log('заход слева prntCoord  ' + prntCoord +'   e.clientX '  + e.clientX);
+		}else{//заход справа
+			slIndex=(imgS.length - 1);
+//		console.log('заход справа prntCoord  ' + prntCoord +'   e.clientX ' + e.clientX);
+		}
+		imgSwch(slIndex);
+	}
+
 	goodSlid.onmousemove = function(e){
 		if(alFlag==true){
 			alFlag=false;
-			setTimeout( function() {alFlag=true;}, 50);
-			let mousCoord = e.clientX - parntCoord;
-			for (let i = 0; i < imgS.length; i++) {if(mousCoord<(swStep*(i+1))){slIndex=i;break;}}
-			imgSwch(slIndex);	}	}
-	goodSlid.onmouseout = function(e){
-		alFlag=false;
-		slIndex=0;
-		imgSwch(slIndex);}
-}}
+			setTimeout( function() {alFlag=true;}, 200);
+			let clX = e.clientX - prntCoord;
+			if(clX>mousCoord){//движение вправо
+//				console.log('движение вправо  clX=' + clX);
+				if((clX-((slIndex+1)*swStep))>10){if(slIndex<(imgS.length-1)){	slIndex++;}	}
+			}else{//движение влево
+//				console.log('движение влево  clX=' + clX);
+				if(((slIndex*swStep)-clX)>10){	if(slIndex>0){	slIndex--;}	}}
+			imgSwch(slIndex);
+			mousCoord = clX;}	}
+
+	goodSlid.onmouseout = function(e){imgSwch(0);}
+	}}
 
 
 let filtShow = document.querySelectorAll(".filtShow");
