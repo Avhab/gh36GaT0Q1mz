@@ -129,7 +129,9 @@ function touchSwap(scrolCont, slide) {
 				let j;
 				for (j = 0; j < slide.length; j++) {
 					scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
-					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez+3;}
+					if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+						scrolRez = scrolRez + ((contWidth-slide[j].offsetWidth)/2);
+					}else{scrolRez = scrolRez+3;} //если нет, то просто добавляем чуть-чуть, чтобы было не впритирку
 					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
 				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 			}
@@ -138,8 +140,10 @@ function touchSwap(scrolCont, slide) {
 				for (j = (slide.length - 1); j >= 0; j--) {
 					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
 					scrolRez = slide[j].offsetLeft-contLeft;
-					if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez-3;}	}
-				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+					if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+						scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
+					}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
+				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
 			}
 			inerthDif=0;
 		}
