@@ -87,6 +87,25 @@ for (let i = 0; i < hScrol.length; i++) {
 //===========
 //	if(!isTouchDevice){touchSwap(scrolCont, slide);	}
 	touchSwap(scrolCont, slide);
+	
+//=======вставка дополнительных элеметов в слайдер----------------начало
+	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
+//если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
+	if(((scrolCont.offsetWidth-slide[0].offsetWidth)>(slidGap*2))&&((slide[0].offsetWidth-(scrolCont.offsetWidth/2))>10)){
+		let slideMin0 = document.createElement("div");
+		scrolCont.prepend(slideMin0);
+		let slideOvLast = document.createElement("div");
+		scrolCont.append(slideOvLast);
+		let widF = ((scrolCont.offsetWidth-slide[0].offsetWidth-(2*slidGap))/2);
+		let widL = ((scrolCont.offsetWidth-slide[slide.length-1].offsetWidth-(2*slidGap))/2);
+		slideMin0.style.minWidth = widF + 'px';
+		slideMin0.style.width = widL + 'px';
+		slideOvLast.style.minWidth = widF + 'px';
+		slideOvLast.style.width = widL + 'px';
+
+	}
+
+//=======вставка дополнительных элеметов в слайдер----------------конец
 }
 
 //===скролл мышью ====начало
@@ -178,7 +197,7 @@ for (let i = 0; i < videoFrame.length; i++) {
 if(playButt){playButt.onclick = function(){setVideoReady();}	}	}
 //====запуск видео на проигрывание===----здесь не применяется
 
-//====перекрывание прозрачным псевдоэлементом элемента с фреймом
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом------начало
 function frameGlass() {
 	let videoFBk = document.querySelectorAll(".videoFBk");
 	for (let i = 0; i < videoFBk.length; i++) {
@@ -206,7 +225,7 @@ function frameGlass() {
 	}}
 
 frameGlass();
-//====перекрывание прозрачным псевдоэлементом элемента с фреймом
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом------конец
 
 
 
@@ -349,48 +368,6 @@ for (let i = 0; i < goodCard.length; i++) {
 	goodSlid.onmousemove = function(e){goodSlidCoord(e);}
 	goodSlid.onmouseout = function(e){imgSwch(0);}
 	}}
-//=======================
-//=======================
-/*
-	let mousCoord;
-	let slIndex;
-	let alFlag=true;
-	let swStep;
-	let prntCoord;
-
-	goodSlid.onmouseover = function(e){
-console.log('onmouseover');
-		prntCoord = goodSlid.getBoundingClientRect().left ;
-		mousCoord = e.clientX - prntCoord;
-		swStep = goodSlid.offsetWidth/imgS.length;
-		if (((this.offsetWidth/2)-mousCoord)>0){//заход слева
-			slIndex=0;
-//		console.log('заход слева prntCoord  ' + prntCoord +'   e.clientX '  + e.clientX);
-		}else{//заход справа
-			slIndex=(imgS.length - 1);
-//		console.log('заход справа prntCoord  ' + prntCoord +'   e.clientX ' + e.clientX);
-		}
-		imgSwch(slIndex);
-	}
-
-	goodSlid.onmousemove = function(e){
-console.log('onmousemove');
-		if(alFlag==true){
-			alFlag=false;
-			setTimeout( function() {alFlag=true;}, 200);
-			let clX = e.clientX - prntCoord;
-			if(clX>mousCoord){//движение вправо
-//				console.log('движение вправо  clX=' + clX);
-				if((clX-((slIndex+1)*swStep))>10){if(slIndex<(imgS.length-1)){	slIndex++;}	}
-			}else{//движение влево
-//				console.log('движение влево  clX=' + clX);
-				if(((slIndex*swStep)-clX)>10){	if(slIndex>0){	slIndex--;}	}}
-			imgSwch(slIndex);
-			mousCoord = clX;}	}
-
-	goodSlid.onmouseout = function(e){imgSwch(0);}
-	}}
-	*/
 //=======================
 
 
