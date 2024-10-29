@@ -43,7 +43,7 @@ let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
 let slideArr = document.querySelector(".slideBanner .slideArr");
 if(isTouchDevice==true){slideArr.style.display = "none";}
 
-
+//======скролл функциональными кнопками-----начало
 let hScrol = document.querySelectorAll(".hScrol");
 for (let i = 0; i < hScrol.length; i++) {
 	let scrolCont = hScrol[i].querySelector(".hScrol>.scrolCont");
@@ -82,13 +82,14 @@ for (let i = 0; i < hScrol.length; i++) {
 		}
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
+//======скролл функциональными кнопками-----конец
 
 //===========
 //	if(!isTouchDevice){touchSwap(scrolCont, slide);	}
 	touchSwap(scrolCont, slide);
 }
 
-
+//===скролл мышью ====начало
 function touchSwap(scrolCont, slide) {
 	let mouseShift;
 	let dragFlag=false;
@@ -99,7 +100,9 @@ function touchSwap(scrolCont, slide) {
 	function mDown(e) {
 		if(stopFlag==true){
 //console.log('mDown');
+//=======================
 			e.preventDefault();
+//=======================
 			mouseShift=e.pageX;
 			dragFlag=true;
 			prevPnt=e.pageX;
@@ -117,8 +120,8 @@ function touchSwap(scrolCont, slide) {
 //console.log('mUp');
 		if(dragFlag==true){
 			dragFlag=false;
-		stopFlag=false;
-		setTimeout( function() {stopFlag=true;}, 100);
+			stopFlag=false;
+			setTimeout( function() {stopFlag=true;}, 100);
 			let sclLeft = scrolCont.scrollLeft; 
 			let contWidth = scrolCont.offsetWidth;
 			let contLeft = scrolCont.offsetLeft;
@@ -152,27 +155,18 @@ function touchSwap(scrolCont, slide) {
 	if(isTouchDevice==true){
 		scrolCont.style.touchAction = "none";
 		scrolCont.onpointerdown = function(e){mDown(e);}
-//		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
-//		scrolCont.addEventListener("mousedown", function (e) {mDown(e);});
 		document.addEventListener("mousemove", function (e) {mMove(e);});
-		document.addEventListener("mouseup", function (e) {
-//console.log('mouseup');
-			mUp(e);});
-/*
-		document.addEventListener("mouseleave", function (e) {
-console.log('mouseleave');
-			mUp(e);});
-		document.addEventListener("mouseout", function (e) {
-console.log('mouseout');
-			mUp(e);});*/
+		document.addEventListener("mouseup", function (e) {	mUp(e);});
+		scrolCont.addEventListener("mouseleave", function (e) {	mUp(e);});
 	}
 }
+//===скролл мышью ====конец
 
-
+//====запуск видео на проигрывание===----здесь не применяется
 let videoFrame = document.querySelectorAll(".videoFrame");
 for (let i = 0; i < videoFrame.length; i++) {
 	let video = videoFrame[i].querySelector(".videoFrame video");
@@ -181,11 +175,11 @@ for (let i = 0; i < videoFrame.length; i++) {
 		playButt.style.opacity = '0';
 		video.setAttribute('controls', 'controls');
 		video.play();}
-if(playButt){
-	playButt.onclick = function(){setVideoReady();}	}
-}
+if(playButt){playButt.onclick = function(){setVideoReady();}	}	}
+//====запуск видео на проигрывание===----здесь не применяется
 
-function videoSwap() {
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом
+function frameGlass() {
 	let videoFBk = document.querySelectorAll(".videoFBk");
 	for (let i = 0; i < videoFBk.length; i++) {
 		let mouseShift;
@@ -208,11 +202,11 @@ function videoSwap() {
 				if(frzFlag==true){
 					this.classList.add("glassed");	}	}	
 		}
-
 		touchSwap(scrolCont, slide);
 	}}
 
-videoSwap();
+frameGlass();
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом
 
 
 
@@ -331,8 +325,8 @@ for (let i = 0; i < goodCard.length; i++) {
 		let indicS = indicPanl.querySelectorAll(".indicPanl>*");
 		indicPanl.onmouseout = function(e){imgSwch(0);}
 		for (let i = 0; i < indicS.length; i++) {
-			indicS[i].onmousemove = function(e){
-				if(!this.classList.contains("marked")){imgSwch(i);}	}}
+			indicS[i].onmousemove = function(){imgSwch(i);}
+			indicS[i].onclick = function(){imgSwch(i);}		}
 		
 		imgSwch(0);
 		
@@ -343,12 +337,21 @@ for (let i = 0; i < goodCard.length; i++) {
 					indicS[i].classList.add("marked");
 				}else{
 					imgS[i].style.opacity = "0";
-					indicS[i].classList.remove("marked");
-				}
-			}
-		}
+					indicS[i].classList.remove("marked");}	}}
 		
 //=======================
+	let swStep=goodSlid.offsetWidth/imgS.length;
+	function goodSlidCoord(e) {
+		let mousCoord = e.clientX - goodSlid.getBoundingClientRect().left;
+		for (let i = 0; i < imgS.length; i++) {	if(mousCoord<(swStep*(i+1))){imgSwch(i);break;}}}
+	
+	goodSlid.onclick = function(e){goodSlidCoord(e);}
+	goodSlid.onmousemove = function(e){goodSlidCoord(e);}
+	goodSlid.onmouseout = function(e){imgSwch(0);}
+	}}
+//=======================
+//=======================
+/*
 	let mousCoord;
 	let slIndex;
 	let alFlag=true;
@@ -356,6 +359,7 @@ for (let i = 0; i < goodCard.length; i++) {
 	let prntCoord;
 
 	goodSlid.onmouseover = function(e){
+console.log('onmouseover');
 		prntCoord = goodSlid.getBoundingClientRect().left ;
 		mousCoord = e.clientX - prntCoord;
 		swStep = goodSlid.offsetWidth/imgS.length;
@@ -370,6 +374,7 @@ for (let i = 0; i < goodCard.length; i++) {
 	}
 
 	goodSlid.onmousemove = function(e){
+console.log('onmousemove');
 		if(alFlag==true){
 			alFlag=false;
 			setTimeout( function() {alFlag=true;}, 200);
@@ -385,6 +390,8 @@ for (let i = 0; i < goodCard.length; i++) {
 
 	goodSlid.onmouseout = function(e){imgSwch(0);}
 	}}
+	*/
+//=======================
 
 
 let filtShow = document.querySelectorAll(".filtShow");
