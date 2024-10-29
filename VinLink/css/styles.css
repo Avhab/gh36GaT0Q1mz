@@ -128,11 +128,11 @@ background:url(../images/loupe.svg) center center no-repeat;background-size:cont
 .slideBanner {position:relative;width:100%;}
 .slideBanner .scrolCont {width:100%;gap:0.5rem;}
 
-.slideBanner .cont>div {position:relative;line-height:0;max-width:100%;width:100%;height:444px;border-radius:10px;
+.slideBanner .slBann {position:relative;line-height:0;max-width:100%;width:100%;height:444px;border-radius:10px;
 overflow:hidden;white-space:normal;flex-shrink: 0;}
-.slideBanner .cont>div img {min-height:100%;min-width:100%;}
-.slideBanner .cont>div::after {content:"";position:absolute;z-index:2;top:0;right:0;height:100%;width:100%;background: rgba(0, 0, 0, 0.7);}
-.slideBanner .cont>div .uppBlock {position:absolute;z-index:3;top:5%;left:8%;color:#FFF;height:90%;
+.slideBanner .slBann img {min-height:100%;min-width:100%;}
+.slideBanner .slBann::after {content:"";position:absolute;z-index:2;top:0;right:0;height:100%;width:100%;background: rgba(0, 0, 0, 0.7);}
+.slideBanner .slBann .uppBlock {position:absolute;z-index:3;top:5%;left:8%;color:#FFF;height:90%;
 display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:start;gap:0;flex-direction:column;}
 .slideBanner .Tit {font-weight:600;font-size:47px;line-height:142%;text-transform:uppercase;}
 .slideBanner .subTit {font-size:32px;line-height:2.44rem;}
@@ -325,6 +325,8 @@ display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;}
 footer .arrDown {display:none;}
 footer .arvTim {font-size:18px;}
 
+.joinUs ul {gap:40px;}
+
 footer.narr {padding:1rem 0 40px 0;font-size:12px;margin-bottom:70px;}
 footer.narr .logo {margin-top: 0;}
 footer.narr .colmn {width:100%;/*margin-bottom:32px;*/}
@@ -392,7 +394,7 @@ background-position:center center;background-repeat:no-repeat;background-size:co
 @media (max-width:900px) {
 .slideBanner .Tit {font-size:26px;}
 .slideBanner .subTit {font-size:20px;}
-.slideBanner .cont>div {height:274px;}
+.slideBanner .slBann {height:274px;}
 .slideBanner .buttnB {width:170px;height:32px;border-radius:5px;font-size:12px;line-height:10px;}
 .cataLog {margin-bottom:21px;}
 .scrolBrand {margin-top:21px;}
@@ -420,7 +422,7 @@ background-position:center center;background-repeat:no-repeat;background-size:co
 .slideBanner {margin-top:25px;padding:0;}
 .slideBanner .Tit {font-size:18px;font-weight:400;line-height: 25px;}
 .slideBanner .subTit {font-size:13px;}
-.slideBanner .cont>div {width:408px;height:174px;}
+.slideBanner .slBann {width:408px;height:174px;}
 .slideBanner .buttnB {width:113px;height:24px;font-weight:400;font-size:8px;}
 .slideBanner .slideArr {display:none;}
 .cataLog .leftArr {display:none;}
@@ -440,7 +442,8 @@ background-position:center center;background-repeat:no-repeat;background-size:co
 .thankYou .buttnB {width:107px;height:25px;font-size:12px;border-radius: 5px;}
 .thankYou h1 {text-align:left;font-size:15px;}
 .upperLine.darkCl, .upperLine.darkCl .teleph {font-size:12px;}
-h1 {text-align:center;}}
+h1 {text-align:center;}
+.joinUs ul {flex-direction:row-reverse;}}
 
 @media (max-width:600px) {
 .buttn {width:122px;height:32px;}
