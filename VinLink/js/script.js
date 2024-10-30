@@ -43,7 +43,8 @@ let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
 let slideArr = document.querySelector(".slideBanner .slideArr");
 if(isTouchDevice==true){slideArr.style.display = "none";}
 
-//======скролл функциональными кнопками-----начало
+
+//======перебор контейнеров комплектов горизонтального скролла hScrol и создание переменных контейнера слайдов и стрелок-----НАЧАЛО
 let hScrol = document.querySelectorAll(".hScrol");
 for (let i = 0; i < hScrol.length; i++) {
 	let scrolCont = hScrol[i].querySelector(".hScrol>.scrolCont");
@@ -57,6 +58,7 @@ for (let i = 0; i < hScrol.length; i++) {
 	if (arrRight) {	arrRight.onclick = function(){stepScrollLeft();}	}
 	if (arrLeft) {	arrLeft.onclick = function(){stepScrollRight();}	}
 
+//======скролл функциональными кнопками-----НАЧАЛО
 	function stepScrollLeft() {
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
@@ -65,10 +67,8 @@ for (let i = 0; i < hScrol.length; i++) {
 		for (let j = 0; j < slide.length; j++) {
 			scrolRez = slide[j].offsetLeft-contLeft;
 			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}
-			if((((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)-(sclLeft+contWidth))>5){break;}
-		}
-		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-	}
+			if((((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)-(sclLeft+contWidth))>5){break;}		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
 
 	function stepScrollRight() {
 		let sclLeft = scrolCont.scrollLeft; 
@@ -78,17 +78,20 @@ for (let i = 0; i < hScrol.length; i++) {
 		for (let j = (slide.length - 1); j >= 0; j--) {
 			scrolRez = ((slide[j].offsetLeft-contLeft)+slide[j].offsetWidth)-contWidth;
 			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
-			if((sclLeft-(slide[j].offsetLeft-contLeft))>5){break;}
-		}
-		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-	}
-//======скролл функциональными кнопками-----конец
+			if((sclLeft-(slide[j].offsetLeft-contLeft))>5){break;}		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
+//======скролл функциональными кнопками-----КОНЕЦ
 
 //===========
 //	if(!isTouchDevice){touchSwap(scrolCont, slide);	}
-	touchSwap(scrolCont, slide);
-	
-//=======вставка дополнительных элеметов в слайдер----------------начало
+	touchSwap(scrolCont, slide, true);
+	fictSide(scrolCont, slide);
+}
+//======перебор контейнеров комплектов горизонтального скролла hScrol и создание переменных контейнера слайдов и стрелок-----КОНЕЦ
+
+
+//=======вставка дополнительных элементов в слайдер----------------НАЧАЛО
+function fictSide(scrolCont, slide) {
 	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
 //если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
 	if(((scrolCont.offsetWidth-slide[0].offsetWidth)>(slidGap*2))&&((slide[0].offsetWidth-(scrolCont.offsetWidth/2))>10)){
@@ -102,27 +105,23 @@ for (let i = 0; i < hScrol.length; i++) {
 		slideMin0.style.width = widL + 'px';
 		slideOvLast.style.minWidth = widF + 'px';
 		slideOvLast.style.width = widL + 'px';
-
 	}
-
-//=======вставка дополнительных элеметов в слайдер----------------конец
 }
+//=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
 
-//===скролл мышью ====начало
-function touchSwap(scrolCont, slide) {
-	let mouseShift;
+//===скролл мышью ====НАЧАЛО
+function touchSwap(scrolCont, slide, prevDef) {
 	let dragFlag=false;
 	let stopFlag=true;
 	let prevPnt;
 	let inerthDif=0;
-	
+//console.log('scrolCont ' + scrolCont + '   slide ' + slide + '   prevDef ' + prevDef);
 	function mDown(e) {
 		if(stopFlag==true){
-//console.log('mDown');
+//console.log('mDown======================');
 //=======================
-			e.preventDefault();
+			if(prevDef){e.preventDefault();}
 //=======================
-			mouseShift=e.pageX;
 			dragFlag=true;
 			prevPnt=e.pageX;
 			inerthDif=0;
@@ -130,9 +129,9 @@ function touchSwap(scrolCont, slide) {
 	function mMove(e) {
 //console.log('mMove');
 		if(dragFlag==true){
-			scrolCont.scrollLeft=scrolCont.scrollLeft+(mouseShift-e.pageX);
-			mouseShift=e.pageX;
+			scrolCont.scrollLeft=scrolCont.scrollLeft+(prevPnt-e.pageX);
 			inerthDif = e.pageX - prevPnt;
+//console.log('inerthDif ' + inerthDif);
 			prevPnt=e.pageX;
 		}	}
 	function mUp(e) {
@@ -144,8 +143,10 @@ function touchSwap(scrolCont, slide) {
 			let sclLeft = scrolCont.scrollLeft; 
 			let contWidth = scrolCont.offsetWidth;
 			let contLeft = scrolCont.offsetLeft;
-			let tmp = (scrolCont.scrollWidth/slide.length)/contWidth;
-			inerthDif=inerthDif*tmp*20;
+//			let tmp = (scrolCont.scrollWidth/slide.length)/contWidth;
+			let tmp = contWidth/slide[1].offsetWidth;
+			inerthDif=inerthDif*tmp*5;
+//console.log('contWidth ' + contWidth + '   slide.offsetWidth ' + slide[1].offsetWidth + '   tmp ' + tmp + '   inerthDif ' + inerthDif);
 			let scrolRez;
 			if(inerthDif<0){
 				let j;
@@ -183,7 +184,7 @@ function touchSwap(scrolCont, slide) {
 		scrolCont.addEventListener("mouseleave", function (e) {	mUp(e);});
 	}
 }
-//===скролл мышью ====конец
+//===скролл мышью ====КОНЕЦ
 
 //====запуск видео на проигрывание===----здесь не применяется
 let videoFrame = document.querySelectorAll(".videoFrame");
@@ -197,35 +198,31 @@ for (let i = 0; i < videoFrame.length; i++) {
 if(playButt){playButt.onclick = function(){setVideoReady();}	}	}
 //====запуск видео на проигрывание===----здесь не применяется
 
-//====перекрывание прозрачным псевдоэлементом элемента с фреймом------начало
-function frameGlass() {
-	let videoFBk = document.querySelectorAll(".videoFBk");
-	for (let i = 0; i < videoFBk.length; i++) {
-		let mouseShift;
-		let dragFlag=false;
-		let scrolCont = videoFBk[i].querySelector(".scrolCont");
-		let slide = scrolCont.querySelectorAll(".videoFrame");
-		let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
-		for (let i = 0; i < videoFrame.length; i++) {
-			let coordX;
-			let coordY;
-			let frzFlag=false;
-			videoFrame[i].classList.add("glassed");
-			videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
-			videoFrame[i].onmouseup = function(e){
-				if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
-					frzFlag=false;
-					setTimeout( function() {frzFlag=true;}, 300);
-					this.classList.remove("glassed");}	}
-			videoFrame[i].onmouseout = function(e){
-				if(frzFlag==true){
-					this.classList.add("glassed");	}	}	
-		}
-		touchSwap(scrolCont, slide);
-	}}
-
-frameGlass();
-//====перекрывание прозрачным псевдоэлементом элемента с фреймом------конец
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом------НАЧАЛО
+let videoFBk = document.querySelectorAll(".videoFBk");
+for (let i = 0; i < videoFBk.length; i++) {
+	let scrolCont = videoFBk[i].querySelector(".scrolCont");
+	let slide = scrolCont.querySelectorAll(".videoFrame");
+	let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
+	for (let i = 0; i < videoFrame.length; i++) {
+		let coordX;
+		let coordY;
+		let frzFlag=false;
+		videoFrame[i].classList.add("glassed");
+		videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
+		videoFrame[i].onmouseup = function(e){
+			if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
+				frzFlag=false;
+				setTimeout( function() {frzFlag=true;}, 300);
+				this.classList.remove("glassed");}	}
+		videoFrame[i].onmouseout = function(e){
+			if(frzFlag==true){
+				this.classList.add("glassed");	}	}	
+	}
+	touchSwap(scrolCont, slide, false);
+	fictSide(scrolCont, slide);
+}
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом------КОНЕЦ
 
 
 
