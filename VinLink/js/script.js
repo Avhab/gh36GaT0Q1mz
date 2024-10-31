@@ -319,78 +319,72 @@ for (let i = 0; i < videoFBk.length; i++) {
 //======перебор контейнеров комплектов горизонтального скролла videoFBk и создание переменных контейнера слайдов-----КОНЕЦ
 
 
+let footer = document.querySelector("footer");
+let colmn1 = footer.querySelector(".colmn1");
+let colmn2 = footer.querySelector(".colmn2");
+let colmn3 = footer.querySelector(".colmn3");
+let colmn4 = footer.querySelector(".colmn4");
+let logo = footer.querySelector(".logo");
+let wrkTim = footer.querySelector(".wrkTim");
+let persCab = footer.querySelector(".persCab");
+//let szFlag;
+if(window.innerWidth<950){
+	footer.classList.add("narr");
+//	szFlag=true;
+	colmn2.prepend(wrkTim);
+	colmn2.prepend(logo);
 
-let footSw=true;
-
-function footerSwap() {
-	if(footSw==true){
-		footSw=false;
-		setTimeout( function() {footSw=true;	}, 300);
-
-		let footer = document.querySelector("footer");
-		let colmn1 = footer.querySelector(".colmn1");
-		let colmn2 = footer.querySelector(".colmn2");
-		let colmn3 = footer.querySelector(".colmn3");
-		let colmn4 = footer.querySelector(".colmn4");
-		let logo = footer.querySelector(".logo");
-		let wrkTim = footer.querySelector(".wrkTim");
-		let persCab = footer.querySelector(".persCab");
-		let szFlag;
-		if(window.innerWidth<950){
-			footer.classList.add("narr");
-			szFlag=true;
-			colmn2.prepend(wrkTim);
-			colmn2.prepend(logo);
-		}else{
-			footer.classList.remove("narr");
-			szFlag=false;
-			colmn1.prepend(logo);
-			persCab.after(wrkTim);
-		}
-
-		let swap = footer.querySelectorAll(".swap");
-		
-		for (let i = 0; i < swap.length; i++) {
-			let arrDown = swap[i].querySelector(".arrDown");
-			let ul = swap[i].querySelector("ul");
-			let heigOn;
-			if(szFlag==true){
-				ul.style.opasity = "0";
-				ul.style.transitionDuration = "0.4s";
-				setTimeout( function() {
-					heigOn = ul.clientHeight;
+//=====
+	let swap = footer.querySelectorAll(".swap");
+	for (let i = 0; i < swap.length; i++) {
+		let arrDown = swap[i].querySelector(".arrDown");
+		let ul = swap[i].querySelector("ul");
+		let heigOn;
+//		if(szFlag==true){
+			ul.style.opasity = "0";
+			ul.style.transitionDuration = "0.4s";
+			setTimeout( function() {
+				heigOn = ul.clientHeight;
+				ul.style.height = "0";
+				ul.style.marginTop = "0";
+			}, 200);
+			
+			let flag = false;
+			swap[i].onclick = function(){
+				if (flag == false) {
+					ul.style.opasity = "1";
+					ul.style.height = heigOn + "px";
+					ul.style.marginTop = null;
+					arrDown.style.transform = "scaleY( -1)";
+					setTimeout( function() {flag = true; }, 200);}	}
+					
+			document.addEventListener("click", function (e) {
+				if (flag == true) {
+					setTimeout( function() {flag = false; }, 50);
+					ul.style.opasity = "0";
+					arrDown.style.transform = "scaleY(1)";
 					ul.style.height = "0";
-					ul.style.marginTop = "0";
-				}, 200);
-				
-				let flag = false;
-				swap[i].onclick = function(){
-					if (flag == false) {
-						ul.style.opasity = "1";
-						ul.style.height = heigOn + "px";
-						ul.style.marginTop = null;
-						arrDown.style.transform = "scaleY( -1)";
-						setTimeout( function() {flag = true; }, 200);}	}
-						
-				document.addEventListener("click", function (e) {
-					if (flag == true) {
-						setTimeout( function() {flag = false; }, 50);
-						ul.style.opasity = "0";
-						arrDown.style.transform = "scaleY(1)";
-						ul.style.height = "0";
-						ul.style.marginTop = "0";}	});
-						
-			}else{
-				ul.style.height = null;
-				ul.style.marginTop = null;
-				ul.style.opasity = "1";
-			}
-		}
+					ul.style.marginTop = "0";}	});
+					
+/*		}else{
+			ul.style.height = null;
+			ul.style.marginTop = null;
+			ul.style.opasity = "1";
+		}*/
 	}
+/*
+}else{
+	footer.classList.remove("narr");
+	szFlag=false;
+	colmn1.prepend(logo);
+	persCab.after(wrkTim);
+	*/
 }
 
-let footSwapTime;
 
+
+/*
+let footSwapTime;
 if (window.addEventListener) {
 	window.addEventListener('resize', function (e) {
 		footerSwap();
@@ -400,8 +394,7 @@ if (window.addEventListener) {
 //		if(!footSwapTime){footSwapTime = setTimeout( function() {footSwapTime=null;footerSwap();}, 200);}
 	});
 }
-
-footerSwap();
+*/
 
 let goodCard = document.querySelectorAll(".goodCard");
 for (let i = 0; i < goodCard.length; i++) {
