@@ -50,7 +50,9 @@ for (let i = 0; i < hScrol.length; i++) {
 	let scrolCont = hScrol[i].querySelector(".hScrol>.scrolCont");
 	let dirFlag;
 	let sCoord = scrolCont.scrollLeft; 
-
+//=======================
+//			if(prevDef){scrolCont.preventDefault();}
+//=======================
 	let slide = scrolCont.querySelectorAll(".hScrol>.scrolCont>*");
 	let arrLeft = hScrol[i].querySelector(".leftArr");
 	let arrRight = hScrol[i].querySelector(".rightArr");
@@ -83,9 +85,15 @@ for (let i = 0; i < hScrol.length; i++) {
 //======скролл функциональными кнопками-----КОНЕЦ
 
 //===========
-//	if(!isTouchDevice){touchSwap(scrolCont, slide);	}
+
+if(isTouchDevice==true){
+	toslowSwap(scrolCont, slide);
+}else{
 	touchSwap(scrolCont, slide, true);
-	fictSide(scrolCont, slide);
+}
+fictSide(scrolCont, slide);
+//	scrolCont.style.touchAction = "none";
+
 }
 //======перебор контейнеров комплектов горизонтального скролла hScrol и создание переменных контейнера слайдов и стрелок-----КОНЕЦ
 
@@ -109,74 +117,46 @@ function fictSide(scrolCont, slide) {
 }
 //=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
 
-//===скролл мышью ====НАЧАЛО
+//===установка скроллирования мышью - имитация работы тачпада ====НАЧАЛО
+//получает: скролл-контейнер, массив слайдов, true-блокировка дефолтных реакций на события указателя на контейнере
 function touchSwap(scrolCont, slide, prevDef) {
 	let dragFlag=false;
 	let stopFlag=true;
 	let prevPnt;
 	let inerthDif=0;
-//console.log('scrolCont ' + scrolCont + '   slide ' + slide + '   prevDef ' + prevDef);
+//=======================
+//			if(prevDef){e.preventDefault();}
+//=======================
 	function mDown(e) {
 		if(stopFlag==true){
-//console.log('mDown======================');
-//=======================
-			if(prevDef){e.preventDefault();}
-//=======================
 			dragFlag=true;
 			prevPnt=e.pageX;
 			inerthDif=0;
 		}	}
 	function mMove(e) {
-//console.log('mMove');
 		if(dragFlag==true){
 			scrolCont.scrollLeft=scrolCont.scrollLeft+(prevPnt-e.pageX);
 			inerthDif = e.pageX - prevPnt;
-//console.log('inerthDif ' + inerthDif);
 			prevPnt=e.pageX;
 		}	}
 	function mUp(e) {
-//console.log('mUp');
 		if(dragFlag==true){
 			dragFlag=false;
 			stopFlag=false;
 			setTimeout( function() {stopFlag=true;}, 100);
-			let sclLeft = scrolCont.scrollLeft; 
-			let contWidth = scrolCont.offsetWidth;
-			let contLeft = scrolCont.offsetLeft;
-//			let tmp = (scrolCont.scrollWidth/slide.length)/contWidth;
-			let tmp = contWidth/slide[1].offsetWidth;
-			inerthDif=inerthDif*tmp*5;
-//console.log('contWidth ' + contWidth + '   slide.offsetWidth ' + slide[1].offsetWidth + '   tmp ' + tmp + '   inerthDif ' + inerthDif);
-			let scrolRez;
-			if(inerthDif<0){
-				let j;
-				for (j = 0; j < slide.length; j++) {
-					scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
-					if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
-						scrolRez = scrolRez + ((contWidth-slide[j].offsetWidth)/2);
-					}else{scrolRez = scrolRez+3;} //если нет, то просто добавляем чуть-чуть, чтобы было не впритирку
-					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
-				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-			}
-			if(inerthDif>0){
-				let j;
-				for (j = (slide.length - 1); j >= 0; j--) {
-					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
-					scrolRez = slide[j].offsetLeft-contLeft;
-					if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
-						scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
-					}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
-				scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
-			}
-			inerthDif=0;
+			let leftDir=true;
+			if(prevPnt<e.pageX){leftDir=false;}
+			toSlow(scrolCont, slide, leftDir, inerthDif);
+//			inerthDif=0;
 		}
 	}
 
 	if(isTouchDevice==true){
-		scrolCont.style.touchAction = "none";
-		scrolCont.onpointerdown = function(e){mDown(e);}
+//		scrolCont.onpointerdown = function(e){mDown(e);}
+		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
+		document.addEventListener("pointerleave", function (e) {mUp(e);});
 	}else{
 		scrolCont.onmousedown = function(e){mDown(e);}
 		document.addEventListener("mousemove", function (e) {mMove(e);});
@@ -185,6 +165,109 @@ function touchSwap(scrolCont, slide, prevDef) {
 	}
 }
 //===скролл мышью ====КОНЕЦ
+
+//===установка доводки скролла по событию скролла - для сенсорных устройств====НАЧАЛО
+function toslowSwap(scrolCont, slide) {
+	let flagScr=true;
+	let leftDir=true;
+	let scLft=0;
+	let timeDel;
+	let timeTol;
+
+	scrolCont.addEventListener("scroll", function (e) {
+		if(flagScr==true){
+			flagScr=false;
+			clearTimeout(timeDel);
+			timeDel = setTimeout( function() {
+				flagScr=true;
+				console.log('---> timeDel ');
+				}, 20);
+			let diff = scLft-scrolCont.scrollLeft;
+			scLft=scrolCont.scrollLeft;
+			if (diff<0){leftDir=true;}else{leftDir=false;}
+			
+//			console.log('toslowSwap diff=' + diff + '    timeToL ' + timeTol);
+			clearTimeout(timeTol);
+			timeTol = setTimeout(function() {toslowF();}, 100);
+			console.log('toslowSwap diff=' + diff + '    timeToL ' + timeTol);
+			
+		}
+		
+	});
+	
+	function toslowF(){
+		flagScr=false;
+		setTimeout( function() {
+			flagScr=true;
+			console.log('toslowF Восстановление Flag ' + flagScr);
+		}, 1000);
+
+		toSlow(scrolCont, slide, leftDir, 0);
+/*
+		let sclLeft = scrolCont.scrollLeft; 
+		let contWidth = scrolCont.offsetWidth;
+		let contLeft = scrolCont.offsetLeft;
+		let scrolRez;
+		if(leftDir==true){
+			let j;
+			for (j = 0; j < slide.length; j++) {
+				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
+				if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+					scrolRez = scrolRez + ((contWidth-slide[j].offsetWidth)/2);
+				}else{scrolRez = scrolRez+3;} //если нет, то просто добавляем чуть-чуть, чтобы было не впритирку
+				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft+contWidth)){break;}	}
+			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+		}else{
+			let j;
+			for (j = (slide.length - 1); j >= 0; j--) {
+				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<sclLeft){break;}
+				scrolRez = slide[j].offsetLeft-contLeft;
+				if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+					scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
+				}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
+			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
+		}
+	*/	
+		
+		
+	}
+}
+//===установка доводки скролла для скролл-контейнера====КОНЕЦ
+
+
+//===функция доводки скролла до целого слайда====НАЧАЛО
+//получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
+function toSlow(scrolCont, slide, leftDir, inerthDif){
+	let sclLeft = scrolCont.scrollLeft; 
+	let contWidth = scrolCont.offsetWidth;
+	let contLeft = scrolCont.offsetLeft;
+	let tmp = contWidth/slide[1].offsetWidth;
+	inerthDif=inerthDif*tmp*5;
+	let scrolRez;
+	if(leftDir==true){
+		let j;
+		for (j = 0; j < slide.length; j++) {
+			scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
+			if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+				scrolRez = scrolRez + ((contWidth-slide[j].offsetWidth)/2);
+			}else{scrolRez = scrolRez+3;} //если нет, то просто добавляем чуть-чуть, чтобы было не впритирку
+			if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+	}else{
+		let j;
+		for (j = (slide.length - 1); j >= 0; j--) {
+			if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
+			scrolRez = slide[j].offsetLeft-contLeft;
+			if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+				scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
+			}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
+	}
+//	inerthDif=0;
+}
+//===функция доводки скролла до целого слайда====КОНЕЦ
+
+
 
 //====запуск видео на проигрывание===----здесь не применяется
 let videoFrame = document.querySelectorAll(".videoFrame");
@@ -198,31 +281,42 @@ for (let i = 0; i < videoFrame.length; i++) {
 if(playButt){playButt.onclick = function(){setVideoReady();}	}	}
 //====запуск видео на проигрывание===----здесь не применяется
 
-//====перекрывание прозрачным псевдоэлементом элемента с фреймом------НАЧАЛО
+//======перебор контейнеров комплектов горизонтального скролла videoFBk и создание переменных контейнера слайдов-----НАЧАЛО
 let videoFBk = document.querySelectorAll(".videoFBk");
 for (let i = 0; i < videoFBk.length; i++) {
 	let scrolCont = videoFBk[i].querySelector(".scrolCont");
 	let slide = scrolCont.querySelectorAll(".videoFrame");
 	let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
-	for (let i = 0; i < videoFrame.length; i++) {
-		let coordX;
-		let coordY;
-		let frzFlag=false;
-		videoFrame[i].classList.add("glassed");
-		videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
-		videoFrame[i].onmouseup = function(e){
-			if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
-				frzFlag=false;
-				setTimeout( function() {frzFlag=true;}, 300);
-				this.classList.remove("glassed");}	}
-		videoFrame[i].onmouseout = function(e){
-			if(frzFlag==true){
-				this.classList.add("glassed");	}	}	
-	}
-	touchSwap(scrolCont, slide, false);
-	fictSide(scrolCont, slide);
-}
+//====перекрывание прозрачным псевдоэлементом элемента с фреймом------НАЧАЛО
+//	if(!isTouchDevice){
+		for (let i = 0; i < videoFrame.length; i++) {
+			let coordX;
+			let coordY;
+			let frzFlag=false;
+			videoFrame[i].classList.add("glassed");
+			videoFrame[i].onmousedown = function(e){coordX=e.pageX;	coordY=e.pageY;	}
+			videoFrame[i].onmouseup = function(e){
+				if(((Math.abs(coordX-e.pageX))<5)&&((Math.abs(coordY-e.pageY))<5)){
+					frzFlag=false;
+					setTimeout( function() {frzFlag=true;}, 50);
+					this.classList.remove("glassed");}	}
+			videoFrame[i].onmouseout = function(e){
+				if(frzFlag==true){
+					this.classList.add("glassed");	}	}	}
+					//	}
 //====перекрывание прозрачным псевдоэлементом элемента с фреймом------КОНЕЦ
+	if(isTouchDevice==true){
+		toslowSwap(scrolCont, slide);
+	}else{
+		touchSwap(scrolCont, slide, true);
+	}
+	fictSide(scrolCont, slide);
+	//	scrolCont.style.touchAction = "none";
+	//	touchSwap(scrolCont, slide, false);
+	//	fictSide(scrolCont, slide);
+
+}
+//======перебор контейнеров комплектов горизонтального скролла videoFBk и создание переменных контейнера слайдов-----КОНЕЦ
 
 
 
