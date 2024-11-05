@@ -87,9 +87,9 @@ for (let i = 0; i < hScrol.length; i++) {
 //===========
 
 if(isTouchDevice==true){
-	toslowSwap(scrolCont, slide);
+	toSlowSet(scrolCont, slide);
 }else{
-	touchSwap(scrolCont, slide, true);
+	mouseSwapSet(scrolCont, slide, true);
 }
 fictSide(scrolCont, slide);
 //	scrolCont.style.touchAction = "none";
@@ -100,6 +100,19 @@ fictSide(scrolCont, slide);
 
 //=======вставка дополнительных элементов в слайдер----------------НАЧАЛО
 function fictSide(scrolCont, slide) {
+	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
+//если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
+	if(((scrolCont.offsetWidth-slide[0].offsetWidth)>(slidGap*2))&&((slide[0].offsetWidth-(scrolCont.offsetWidth/2))>10)){
+		let widF = ((scrolCont.offsetWidth-slide[0].offsetWidth-(2*slidGap))/2)+slidGap;
+		let widL = ((scrolCont.offsetWidth-slide[slide.length-1].offsetWidth-(2*slidGap))/2)+slidGap;
+		slide[0].style.marginLeft = widF + 'px';
+		slide[slide.length-1].style.marginRight = widL + 'px';
+	}
+}
+//=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
+/*
+//=======вставка дополнительных элементов в слайдер----------------НАЧАЛО
+function fictSide2(scrolCont, slide) {
 	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
 //если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
 	if(((scrolCont.offsetWidth-slide[0].offsetWidth)>(slidGap*2))&&((slide[0].offsetWidth-(scrolCont.offsetWidth/2))>10)){
@@ -116,10 +129,11 @@ function fictSide(scrolCont, slide) {
 	}
 }
 //=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
+*/
 
 //===установка скроллирования мышью - имитация работы тачпада ====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, true-блокировка дефолтных реакций на события указателя на контейнере
-function touchSwap(scrolCont, slide, prevDef) {
+function mouseSwapSet(scrolCont, slide, prevDef) {
 	let dragFlag=false;
 	let stopFlag=true;
 	let prevPnt;
@@ -136,6 +150,9 @@ function touchSwap(scrolCont, slide, prevDef) {
 	function mMove(e) {
 		if(dragFlag==true){
 			scrolCont.scrollLeft=scrolCont.scrollLeft+(prevPnt-e.pageX);
+			
+//console.log('  prevPnt ' + prevPnt + '   e.pageX ' + e.pageX);
+
 			inerthDif = e.pageX - prevPnt;
 			prevPnt=e.pageX;
 		}	}
@@ -145,8 +162,9 @@ function touchSwap(scrolCont, slide, prevDef) {
 			stopFlag=false;
 			setTimeout( function() {stopFlag=true;}, 100);
 			let leftDir=true;
-			if(prevPnt<e.pageX){leftDir=false;}
-			toSlow(scrolCont, slide, leftDir, inerthDif);
+			if(inerthDif>0){leftDir=false;}
+//console.log( 'leftDir ' + leftDir + '  inerthDif ' + inerthDif + '  prevPnt ' + prevPnt + '   e.pageX ' + e.pageX);
+			mouseSwap(scrolCont, slide, leftDir, inerthDif);
 //			inerthDif=0;
 		}
 	}
@@ -166,82 +184,14 @@ function touchSwap(scrolCont, slide, prevDef) {
 }
 //===скролл мышью ====КОНЕЦ
 
-//===установка доводки скролла по событию скролла - для сенсорных устройств====НАЧАЛО
-function toslowSwap(scrolCont, slide) {
-	let flagScr=true;
-	let leftDir=true;
-	let scLft=0;
-	let timeDel;
-	let timeTol;
-
-	scrolCont.addEventListener("scroll", function (e) {
-		if(flagScr==true){
-			flagScr=false;
-			clearTimeout(timeDel);
-			timeDel = setTimeout( function() {
-				flagScr=true;
-				console.log('---> timeDel ');
-				}, 20);
-			let diff = scLft-scrolCont.scrollLeft;
-			scLft=scrolCont.scrollLeft;
-			if (diff<0){leftDir=true;}else{leftDir=false;}
-			
-//			console.log('toslowSwap diff=' + diff + '    timeToL ' + timeTol);
-			clearTimeout(timeTol);
-			timeTol = setTimeout(function() {toslowF();}, 100);
-			console.log('toslowSwap diff=' + diff + '    timeToL ' + timeTol);
-			
-		}
-		
-	});
-	
-	function toslowF(){
-		flagScr=false;
-		setTimeout( function() {
-			flagScr=true;
-			console.log('toslowF Восстановление Flag ' + flagScr);
-		}, 1000);
-
-		toSlow(scrolCont, slide, leftDir, 0);
-/*
-		let sclLeft = scrolCont.scrollLeft; 
-		let contWidth = scrolCont.offsetWidth;
-		let contLeft = scrolCont.offsetLeft;
-		let scrolRez;
-		if(leftDir==true){
-			let j;
-			for (j = 0; j < slide.length; j++) {
-				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
-				if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
-					scrolRez = scrolRez + ((contWidth-slide[j].offsetWidth)/2);
-				}else{scrolRez = scrolRez+3;} //если нет, то просто добавляем чуть-чуть, чтобы было не впритирку
-				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft+contWidth)){break;}	}
-			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
-		}else{
-			let j;
-			for (j = (slide.length - 1); j >= 0; j--) {
-				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<sclLeft){break;}
-				scrolRez = slide[j].offsetLeft-contLeft;
-				if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
-					scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
-				}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
-			scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
-		}
-	*/	
-		
-		
-	}
-}
-//===установка доводки скролла для скролл-контейнера====КОНЕЦ
-
-
-//===функция доводки скролла до целого слайда====НАЧАЛО
+//===функция доводки скролла до целого слайда - для десктопа====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
-function toSlow(scrolCont, slide, leftDir, inerthDif){
+function mouseSwap(scrolCont, slide, leftDir, inerthDif){
 	let sclLeft = scrolCont.scrollLeft; 
 	let contWidth = scrolCont.offsetWidth;
 	let contLeft = scrolCont.offsetLeft;
 	let tmp = contWidth/slide[1].offsetWidth;
+//console.log('inerthDif ' + inerthDif + '   leftDir  ' + leftDir);
 	inerthDif=inerthDif*tmp*5;
 	let scrolRez;
 	if(leftDir==true){
@@ -265,8 +215,85 @@ function toSlow(scrolCont, slide, leftDir, inerthDif){
 	}
 //	inerthDif=0;
 }
-//===функция доводки скролла до целого слайда====КОНЕЦ
+//===функция доводки скролла до целого слайда - для десктопа====КОНЕЦ
 
+
+//===установка доводки скролла по событию скролла - для сенсорных устройств====НАЧАЛО
+function toSlowSet(scrolCont, slide) {
+	let flagScr=true;
+	let leftDir=true;
+	let scLft=0;
+	let timeDel;
+	let timeTol;
+
+	scrolCont.addEventListener("scroll", function (e) {
+		if(flagScr==true){
+			flagScr=false;
+			clearTimeout(timeDel);
+			
+			let diff = scLft-scrolCont.scrollLeft;
+			scLft=scrolCont.scrollLeft;
+			if (diff<0){leftDir=true;}//по знаку переменной diff задается направление
+			if (diff>0){leftDir=false;}//по знаку переменной diff задается направление
+			//когда переменная diff уменьшится до 5, не восстанавливаем флаг разрешения обработки по скроллу
+			//либо если событий скролла больше не будет, флаг также останется невосстановленным
+			if (Math.abs(diff)>5){timeDel = setTimeout( function() {flagScr=true;	}, 20);	}
+//			console.log('toSlowSet diff=' + diff + '    timeToL ' + timeTol);
+			clearTimeout(timeTol);
+			timeTol = setTimeout(function() {
+				flagScr=false;
+				setTimeout( function() {flagScr=true;}, 1000);
+				toSlow(scrolCont, slide, leftDir, 0);				
+			}, 100);
+//			console.log('toSlowSet diff=' + diff + '    timeToL ' + timeTol);
+		}
+	});
+}
+//===установка доводки скролла для скролл-контейнера====КОНЕЦ
+
+//===функция доводки скролла до целого слайда  - для сенсорных устройств====НАЧАЛО
+//получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
+function toSlow(scrolCont, slide, leftDir, inerthDif){
+	let sclLeft = scrolCont.scrollLeft; 
+	let contWidth = scrolCont.offsetWidth;
+	let contLeft = scrolCont.offsetLeft;
+	let tmp = contWidth/slide[1].offsetWidth;
+	inerthDif=inerthDif*tmp*5;
+	let scrolRez;
+	
+//console.log('текущий скролл ' + sclLeft + '   ширина окна ' + contWidth + '   contLeft ' + contLeft);
+	
+	if(slide[1].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+		let apprx=9999999;
+		let j = 0;
+		for (j; j < slide.length; j++) {		
+			let tmp = Math.abs((sclLeft+(contWidth/2))-((slide[j].offsetWidth/2)+(slide[j].offsetLeft-contLeft)));
+//console.log(j + '  tmp ' + tmp + '=((' + sclLeft + '+(' + contWidth + '/2))-((' + slide[j].offsetWidth + '/2)+(' + slide[j].offsetLeft + '-' + contLeft + ')))');
+//console.log(j + '   apprx ' + apprx + '  tmp ' + tmp);
+			if (apprx>tmp){apprx=tmp;}else{	break;}
+		}
+		j--;
+		scrolRez = ((slide[j].offsetLeft-contLeft)-((contWidth-slide[j].offsetWidth)/2));
+//console.log(j + '  scrolRez ' + scrolRez + '= ((' + slide[j].offsetLeft + '-' + contLeft + ')-((' + contWidth + '-' + slide[j].offsetWidth + ')/2))');
+	}else{
+//console.log('leftDir ' + leftDir);
+		if(leftDir==true){
+			let j;
+			for (j = 0; j < slide.length; j++) {
+				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth + 3;
+				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
+		}else{
+			let j;
+			for (j = (slide.length - 1); j >= 0; j--) {
+				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
+				scrolRez = slide[j].offsetLeft-contLeft-3;
+			}
+		}
+		
+	}
+	scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+}
+//===функция доводки скролла до целого слайда - для сенсорных устройств====КОНЕЦ
 
 
 //====запуск видео на проигрывание===----здесь не применяется
@@ -306,85 +333,91 @@ for (let i = 0; i < videoFBk.length; i++) {
 					//	}
 //====перекрывание прозрачным псевдоэлементом элемента с фреймом------КОНЕЦ
 	if(isTouchDevice==true){
-		toslowSwap(scrolCont, slide);
+		toSlowSet(scrolCont, slide);
 	}else{
-		touchSwap(scrolCont, slide, true);
+		mouseSwapSet(scrolCont, slide, true);
 	}
 	fictSide(scrolCont, slide);
 	//	scrolCont.style.touchAction = "none";
-	//	touchSwap(scrolCont, slide, false);
+	//	mouseSwapSet(scrolCont, slide, false);
 	//	fictSide(scrolCont, slide);
 
 }
 //======перебор контейнеров комплектов горизонтального скролла videoFBk и создание переменных контейнера слайдов-----КОНЕЦ
 
 
-let footer = document.querySelector("footer");
-let colmn1 = footer.querySelector(".colmn1");
-let colmn2 = footer.querySelector(".colmn2");
-let colmn3 = footer.querySelector(".colmn3");
-let colmn4 = footer.querySelector(".colmn4");
-let logo = footer.querySelector(".logo");
-let wrkTim = footer.querySelector(".wrkTim");
-let persCab = footer.querySelector(".persCab");
-//let szFlag;
-if(window.innerWidth<950){
-	footer.classList.add("narr");
-//	szFlag=true;
-	colmn2.prepend(wrkTim);
-	colmn2.prepend(logo);
 
-//=====
-	let swap = footer.querySelectorAll(".swap");
-	for (let i = 0; i < swap.length; i++) {
-		let arrDown = swap[i].querySelector(".arrDown");
-		let ul = swap[i].querySelector("ul");
-		let heigOn;
-//		if(szFlag==true){
-			ul.style.opasity = "0";
-			ul.style.transitionDuration = "0.4s";
-			setTimeout( function() {
-				heigOn = ul.clientHeight;
-				ul.style.height = "0";
-				ul.style.marginTop = "0";
-			}, 200);
-			
-			let flag = false;
-			swap[i].onclick = function(){
-				if (flag == false) {
-					ul.style.opasity = "1";
-					ul.style.height = heigOn + "px";
-					ul.style.marginTop = null;
-					arrDown.style.transform = "scaleY( -1)";
-					setTimeout( function() {flag = true; }, 200);}	}
-					
-			document.addEventListener("click", function (e) {
-				if (flag == true) {
-					setTimeout( function() {flag = false; }, 50);
-					ul.style.opasity = "0";
-					arrDown.style.transform = "scaleY(1)";
+let footSw=true;
+
+function footerSwap() {
+	if(footSw==true){
+		footSw=false;
+		setTimeout( function() {footSw=true;	}, 300);
+
+		let footer = document.querySelector("footer");
+		let colmn1 = footer.querySelector(".colmn1");
+		let colmn2 = footer.querySelector(".colmn2");
+		let colmn3 = footer.querySelector(".colmn3");
+		let colmn4 = footer.querySelector(".colmn4");
+		let logo = footer.querySelector(".logo");
+		let wrkTim = footer.querySelector(".wrkTim");
+		let persCab = footer.querySelector(".persCab");
+		let szFlag;
+		if(window.innerWidth<950){
+			footer.classList.add("narr");
+			szFlag=true;
+			colmn2.prepend(wrkTim);
+			colmn2.prepend(logo);
+		}else{
+			footer.classList.remove("narr");
+			szFlag=false;
+			colmn1.prepend(logo);
+			persCab.after(wrkTim);
+		}
+
+		let swap = footer.querySelectorAll(".swap");
+		
+		for (let i = 0; i < swap.length; i++) {
+			let arrDown = swap[i].querySelector(".arrDown");
+			let ul = swap[i].querySelector("ul");
+			let heigOn;
+			if(szFlag==true){
+				ul.style.opasity = "0";
+				ul.style.transitionDuration = "0.4s";
+				setTimeout( function() {
+					heigOn = ul.clientHeight;
 					ul.style.height = "0";
-					ul.style.marginTop = "0";}	});
-					
-/*		}else{
-			ul.style.height = null;
-			ul.style.marginTop = null;
-			ul.style.opasity = "1";
-		}*/
+					ul.style.marginTop = "0";
+				}, 200);
+				
+				let flag = false;
+				swap[i].onclick = function(){
+					if (flag == false) {
+						ul.style.opasity = "1";
+						ul.style.height = heigOn + "px";
+						ul.style.marginTop = null;
+						arrDown.style.transform = "scaleY( -1)";
+						setTimeout( function() {flag = true; }, 200);}	}
+						
+				document.addEventListener("click", function (e) {
+					if (flag == true) {
+						setTimeout( function() {flag = false; }, 50);
+						ul.style.opasity = "0";
+						arrDown.style.transform = "scaleY(1)";
+						ul.style.height = "0";
+						ul.style.marginTop = "0";}	});
+						
+			}else{
+				ul.style.height = null;
+				ul.style.marginTop = null;
+				ul.style.opasity = "1";
+			}
+		}
 	}
-/*
-}else{
-	footer.classList.remove("narr");
-	szFlag=false;
-	colmn1.prepend(logo);
-	persCab.after(wrkTim);
-	*/
 }
 
-
-
-/*
 let footSwapTime;
+
 if (window.addEventListener) {
 	window.addEventListener('resize', function (e) {
 		footerSwap();
@@ -394,7 +427,8 @@ if (window.addEventListener) {
 //		if(!footSwapTime){footSwapTime = setTimeout( function() {footSwapTime=null;footerSwap();}, 200);}
 	});
 }
-*/
+
+footerSwap();
 
 let goodCard = document.querySelectorAll(".goodCard");
 for (let i = 0; i < goodCard.length; i++) {
