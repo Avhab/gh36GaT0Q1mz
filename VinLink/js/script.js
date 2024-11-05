@@ -56,12 +56,17 @@ for (let i = 0; i < hScrol.length; i++) {
 	let slide = scrolCont.querySelectorAll(".hScrol>.scrolCont>*");
 	let arrLeft = hScrol[i].querySelector(".leftArr");
 	let arrRight = hScrol[i].querySelector(".rightArr");
-
+	let idTimSet;
+	
 	if (arrRight) {	arrRight.onclick = function(){stepScrollLeft();}	}
 	if (arrLeft) {	arrLeft.onclick = function(){stepScrollRight();}	}
 
 //======скролл функциональными кнопками-----НАЧАЛО
 	function stepScrollLeft() {
+		mouseSwapFlag=false;
+		clearTimeout(idTimSet);
+		idTimSet = setTimeout( function() {mouseSwapFlag=true;}, 800);
+		
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
 		let contLeft = scrolCont.offsetLeft;
@@ -73,6 +78,10 @@ for (let i = 0; i < hScrol.length; i++) {
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
 
 	function stepScrollRight() {
+		mouseSwapFlag=false;
+		clearTimeout(idTimSet);
+		idTimSet = setTimeout( function() {mouseSwapFlag=true;}, 800);
+
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
 		let contLeft = scrolCont.offsetLeft;
@@ -98,7 +107,7 @@ fictSide(scrolCont, slide);
 //======перебор контейнеров комплектов горизонтального скролла hScrol и создание переменных контейнера слайдов и стрелок-----КОНЕЦ
 
 
-//=======вставка дополнительных элементов в слайдер----------------НАЧАЛО
+//=======вставка дополнительных отступов в слайдер----------------НАЧАЛО
 function fictSide(scrolCont, slide) {
 	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
 //если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
@@ -109,27 +118,7 @@ function fictSide(scrolCont, slide) {
 		slide[slide.length-1].style.marginRight = widL + 'px';
 	}
 }
-//=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
-/*
-//=======вставка дополнительных элементов в слайдер----------------НАЧАЛО
-function fictSide2(scrolCont, slide) {
-	let slidGap = slide[1].offsetLeft - slide[0].offsetLeft - slide[0].offsetWidth;
-//если размер слайда больше половины окна на 10пикс и меньше целого окна на 2 гэп, вводим доп элементы.
-	if(((scrolCont.offsetWidth-slide[0].offsetWidth)>(slidGap*2))&&((slide[0].offsetWidth-(scrolCont.offsetWidth/2))>10)){
-		let slideMin0 = document.createElement("div");
-		scrolCont.prepend(slideMin0);
-		let slideOvLast = document.createElement("div");
-		scrolCont.append(slideOvLast);
-		let widF = ((scrolCont.offsetWidth-slide[0].offsetWidth-(2*slidGap))/2);
-		let widL = ((scrolCont.offsetWidth-slide[slide.length-1].offsetWidth-(2*slidGap))/2);
-		slideMin0.style.minWidth = widF + 'px';
-		slideMin0.style.width = widL + 'px';
-		slideOvLast.style.minWidth = widF + 'px';
-		slideOvLast.style.width = widL + 'px';
-	}
-}
-//=======вставка дополнительных элементов в слайдер----------------КОНЕЦ
-*/
+//=======вставка дополнительных отступов в слайдер----------------КОНЕЦ
 
 //===установка скроллирования мышью - имитация работы тачпада ====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, true-блокировка дефолтных реакций на события указателя на контейнере
@@ -251,47 +240,50 @@ function toSlowSet(scrolCont, slide) {
 }
 //===установка доводки скролла для скролл-контейнера====КОНЕЦ
 
+let mouseSwapFlag=true;
 //===функция доводки скролла до целого слайда  - для сенсорных устройств====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
 function toSlow(scrolCont, slide, leftDir, inerthDif){
-	let sclLeft = scrolCont.scrollLeft; 
-	let contWidth = scrolCont.offsetWidth;
-	let contLeft = scrolCont.offsetLeft;
-	let tmp = contWidth/slide[1].offsetWidth;
-	inerthDif=inerthDif*tmp*5;
-	let scrolRez;
-	
-//console.log('текущий скролл ' + sclLeft + '   ширина окна ' + contWidth + '   contLeft ' + contLeft);
-	
-	if(slide[1].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
-		let apprx=9999999;
-		let j = 0;
-		for (j; j < slide.length; j++) {		
-			let tmp = Math.abs((sclLeft+(contWidth/2))-((slide[j].offsetWidth/2)+(slide[j].offsetLeft-contLeft)));
-//console.log(j + '  tmp ' + tmp + '=((' + sclLeft + '+(' + contWidth + '/2))-((' + slide[j].offsetWidth + '/2)+(' + slide[j].offsetLeft + '-' + contLeft + ')))');
-//console.log(j + '   apprx ' + apprx + '  tmp ' + tmp);
-			if (apprx>tmp){apprx=tmp;}else{	break;}
-		}
-		j--;
-		scrolRez = ((slide[j].offsetLeft-contLeft)-((contWidth-slide[j].offsetWidth)/2));
-//console.log(j + '  scrolRez ' + scrolRez + '= ((' + slide[j].offsetLeft + '-' + contLeft + ')-((' + contWidth + '-' + slide[j].offsetWidth + ')/2))');
-	}else{
-//console.log('leftDir ' + leftDir);
-		if(leftDir==true){
-			let j;
-			for (j = 0; j < slide.length; j++) {
-				scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth + 3;
-				if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
-		}else{
-			let j;
-			for (j = (slide.length - 1); j >= 0; j--) {
-				if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
-				scrolRez = slide[j].offsetLeft-contLeft-3;
-			}
-		}
+	if(mouseSwapFlag==true){
+		let sclLeft = scrolCont.scrollLeft; 
+		let contWidth = scrolCont.offsetWidth;
+		let contLeft = scrolCont.offsetLeft;
+		let tmp = contWidth/slide[1].offsetWidth;
+		inerthDif=inerthDif*tmp*5;
+		let scrolRez;
 		
+	//console.log('текущий скролл ' + sclLeft + '   ширина окна ' + contWidth + '   contLeft ' + contLeft);
+		
+		if(slide[1].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+			let apprx=9999999;
+			let j = 0;
+			for (j; j < slide.length; j++) {		
+				let tmp = Math.abs((sclLeft+(contWidth/2))-((slide[j].offsetWidth/2)+(slide[j].offsetLeft-contLeft)));
+	//console.log(j + '  tmp ' + tmp + '=((' + sclLeft + '+(' + contWidth + '/2))-((' + slide[j].offsetWidth + '/2)+(' + slide[j].offsetLeft + '-' + contLeft + ')))');
+	//console.log(j + '   apprx ' + apprx + '  tmp ' + tmp);
+				if (apprx>tmp){apprx=tmp;}else{	break;}
+			}
+			j--;
+			scrolRez = ((slide[j].offsetLeft-contLeft)-((contWidth-slide[j].offsetWidth)/2));
+	//console.log(j + '  scrolRez ' + scrolRez + '= ((' + slide[j].offsetLeft + '-' + contLeft + ')-((' + contWidth + '-' + slide[j].offsetWidth + ')/2))');
+		}else{
+	//console.log('leftDir ' + leftDir);
+			if(leftDir==true){
+				let j;
+				for (j = 0; j < slide.length; j++) {
+					scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth + 3;
+					if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
+			}else{
+				let j;
+				for (j = (slide.length - 1); j >= 0; j--) {
+					if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
+					scrolRez = slide[j].offsetLeft-contLeft-3;
+				}
+			}
+			
+		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
-	scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 }
 //===функция доводки скролла до целого слайда - для сенсорных устройств====КОНЕЦ
 
