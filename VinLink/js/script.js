@@ -63,9 +63,9 @@ for (let i = 0; i < hScrol.length; i++) {
 
 //======скролл функциональными кнопками-----НАЧАЛО
 	function stepScrollLeft() {
-		mouseSwapFlag=false;
+		mouseArrowFlag=false;
 		clearTimeout(idTimSet);
-		idTimSet = setTimeout( function() {mouseSwapFlag=true;}, 800);
+		idTimSet = setTimeout( function() {mouseArrowFlag=true;}, 800);
 		
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
@@ -78,9 +78,9 @@ for (let i = 0; i < hScrol.length; i++) {
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
 
 	function stepScrollRight() {
-		mouseSwapFlag=false;
+		mouseArrowFlag=false;
 		clearTimeout(idTimSet);
-		idTimSet = setTimeout( function() {mouseSwapFlag=true;}, 800);
+		idTimSet = setTimeout( function() {mouseArrowFlag=true;}, 800);
 
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
@@ -209,11 +209,34 @@ function mouseSwap(scrolCont, slide, leftDir, inerthDif){
 
 //===установка доводки скролла по событию скролла - для сенсорных устройств====НАЧАЛО
 function toSlowSet(scrolCont, slide) {
-	let flagScr=true;
+	let flagScr=true; //флаг разрешения обработки по скроллу
 	let leftDir=true;
+	let tmID;
 	let scLft=0;
 	let timeDel;
 	let timeTol;
+
+//после тача, на полсекунды блокируем доводку по событию скролла - так меньше затыков при малом перемещении
+/*
+	scrolCont.addEventListener("pointerdown", function (e) {
+console.log('pointerDOWN');
+		flagScr=false;
+		clearTimeout(tmID);
+		tmID = setTimeout( function() {flagScr=true;}, 500);
+		});
+*/
+//лучше блокировать по pointermove - так меньше затыков при малом перемещении
+	document.addEventListener("pointermove", function (e) {
+//console.log('pointermove');
+		flagScr=false;
+		clearTimeout(tmID);
+		tmID = setTimeout( function() {flagScr=true;}, 300);});
+
+	scrolCont.addEventListener("pointerup", function (e) {
+//console.log('pointerUP');
+		toSlow(scrolCont, slide, true, 0);
+		});
+
 
 	scrolCont.addEventListener("scroll", function (e) {
 		if(flagScr==true){
@@ -226,13 +249,13 @@ function toSlowSet(scrolCont, slide) {
 			if (diff>0){leftDir=false;}//по знаку переменной diff задается направление
 			//когда переменная diff уменьшится до 5, не восстанавливаем флаг разрешения обработки по скроллу
 			//либо если событий скролла больше не будет, флаг также останется невосстановленным
-			if (Math.abs(diff)>5){timeDel = setTimeout( function() {flagScr=true;	}, 20);	}
+			if (Math.abs(diff)>3){timeDel = setTimeout( function() {flagScr=true;}, 20);	}
 //			console.log('toSlowSet diff=' + diff + '    timeToL ' + timeTol);
 			clearTimeout(timeTol);
 			timeTol = setTimeout(function() {
 				flagScr=false;
 				setTimeout( function() {flagScr=true;}, 1000);
-				toSlow(scrolCont, slide, leftDir, 0);				
+				toSlow(scrolCont, slide, leftDir, 0);
 			}, 100);
 //			console.log('toSlowSet diff=' + diff + '    timeToL ' + timeTol);
 		}
@@ -240,19 +263,19 @@ function toSlowSet(scrolCont, slide) {
 }
 //===установка доводки скролла для скролл-контейнера====КОНЕЦ
 
-let mouseSwapFlag=true;
+let mouseArrowFlag=true;//флаг блокировки от скролла от кнопок
 //===функция доводки скролла до целого слайда  - для сенсорных устройств====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
 function toSlow(scrolCont, slide, leftDir, inerthDif){
-	if(mouseSwapFlag==true){
+	if(mouseArrowFlag==true){
 		let sclLeft = scrolCont.scrollLeft; 
 		let contWidth = scrolCont.offsetWidth;
 		let contLeft = scrolCont.offsetLeft;
 		let tmp = contWidth/slide[1].offsetWidth;
-		inerthDif=inerthDif*tmp*5;
+		inerthDif=inerthDif*tmp*2;
 		let scrolRez;
 		
-	//console.log('текущий скролл ' + sclLeft + '   ширина окна ' + contWidth + '   contLeft ' + contLeft);
+//	console.log('текущий скролл ' + sclLeft + '   ширина окна ' + contWidth + '   contLeft ' + contLeft);
 		
 		if(slide[1].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
 			let apprx=9999999;
@@ -307,7 +330,7 @@ for (let i = 0; i < videoFBk.length; i++) {
 	let slide = scrolCont.querySelectorAll(".videoFrame");
 	let videoFrame = videoFBk[i].querySelectorAll(".videoFrame");
 //====перекрывание прозрачным псевдоэлементом элемента с фреймом------НАЧАЛО
-//	if(!isTouchDevice){
+	if(!isTouchDevice){
 		for (let i = 0; i < videoFrame.length; i++) {
 			let coordX;
 			let coordY;
@@ -322,7 +345,7 @@ for (let i = 0; i < videoFBk.length; i++) {
 			videoFrame[i].onmouseout = function(e){
 				if(frzFlag==true){
 					this.classList.add("glassed");	}	}	}
-					//	}
+						}
 //====перекрывание прозрачным псевдоэлементом элемента с фреймом------КОНЕЦ
 	if(isTouchDevice==true){
 		toSlowSet(scrolCont, slide);
