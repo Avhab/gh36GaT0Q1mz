@@ -120,13 +120,17 @@ function fictSide(scrolCont, slide) {
 }
 //=======вставка дополнительных отступов в слайдер----------------КОНЕЦ
 
+
+
+
+
 //===установка скроллирования мышью - имитация работы тачпада ====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, true-блокировка дефолтных реакций на события указателя на контейнере
 function mouseSwapSet(scrolCont, slide, prevDef) {
 	let dragFlag=false;
 	let stopFlag=true;
 	let prevPnt;
-	let inerthDif=0;
+	let inerthDif=0; //изменение координаты драга
 //=======================
 //			if(prevDef){e.preventDefault();}
 //=======================
@@ -138,10 +142,9 @@ function mouseSwapSet(scrolCont, slide, prevDef) {
 		}	}
 	function mMove(e) {
 		if(dragFlag==true){
-			scrolCont.scrollLeft=scrolCont.scrollLeft+(prevPnt-e.pageX);
-			
 //console.log('  prevPnt ' + prevPnt + '   e.pageX ' + e.pageX);
-
+			scrolCont.scrollLeft=scrolCont.scrollLeft+(prevPnt-e.pageX);
+//console.log( 'Движение   prevPnt ' + prevPnt + '     e.pageX ' + e.pageX);
 			inerthDif = e.pageX - prevPnt;
 			prevPnt=e.pageX;
 		}	}
@@ -150,16 +153,22 @@ function mouseSwapSet(scrolCont, slide, prevDef) {
 			dragFlag=false;
 			stopFlag=false;
 			setTimeout( function() {stopFlag=true;}, 100);
+//console.log( 'Отпускание   inerthDif ' + inerthDif);
 			let leftDir=true;
 			if(inerthDif>0){leftDir=false;}
-//console.log( 'leftDir ' + leftDir + '  inerthDif ' + inerthDif + '  prevPnt ' + prevPnt + '   e.pageX ' + e.pageX);
-			mouseSwap(scrolCont, slide, leftDir, inerthDif);
-//			inerthDif=0;
+//			if((Math.abs(inerthDif))<5){inerthDif=0;} //если последнее движение менее 5, отменяем инерцию полностью - доводка будет до ближайшего слайда
+//			mouseSwap(scrolCont, slide, leftDir, inerthDif);
+//если последнее движение менее 5, не выполняем доводку
+//			if((Math.abs(inerthDif))>5){mouseSwap(scrolCont, slide, leftDir, inerthDif);}
+			if((Math.abs(inerthDif))>5){
+				mouseSwap(scrolCont, slide, leftDir, inerthDif);
+			}else{
+				mouseSwap2(scrolCont, slide);
+			}
 		}
 	}
 
 	if(isTouchDevice==true){
-//		scrolCont.onpointerdown = function(e){mDown(e);}
 		scrolCont.addEventListener("pointerdown", function (e) {mDown(e);});
 		document.addEventListener("pointermove", function (e) {mMove(e);});
 		document.addEventListener("pointerout", function (e) {mUp(e);});
@@ -171,9 +180,10 @@ function mouseSwapSet(scrolCont, slide, prevDef) {
 		scrolCont.addEventListener("mouseleave", function (e) {	mUp(e);});
 	}
 }
-//===скролл мышью ====КОНЕЦ
+//===установка скроллирования мышью - имитация работы тачпада ====КОНЕЦ
 
-//===функция доводки скролла до целого слайда - для десктопа====НАЧАЛО
+
+//===функция доводки скролла до целого слайда с указанием направления движения - для десктопа====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
 function mouseSwap(scrolCont, slide, leftDir, inerthDif){
 	let sclLeft = scrolCont.scrollLeft; 
@@ -183,8 +193,8 @@ function mouseSwap(scrolCont, slide, leftDir, inerthDif){
 //console.log('inerthDif ' + inerthDif + '   leftDir  ' + leftDir);
 	inerthDif=inerthDif*tmp*5;
 	let scrolRez;
+	let j;
 	if(leftDir==true){
-		let j;
 		for (j = 0; j < slide.length; j++) {
 			scrolRez = ((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth) - contWidth;
 			if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
@@ -193,18 +203,63 @@ function mouseSwap(scrolCont, slide, leftDir, inerthDif){
 			if(((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)>(sclLeft-inerthDif+contWidth)){break;}	}
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}else{
-		let j;
 		for (j = (slide.length - 1); j >= 0; j--) {
 			if((slide[j].offsetLeft-contLeft+slide[j].offsetWidth)<(sclLeft-inerthDif)){break;}
 			scrolRez = slide[j].offsetLeft-contLeft;
 			if(slide[j].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
 				scrolRez = scrolRez - ((contWidth-slide[j].offsetWidth)/2);
 			}else{scrolRez = scrolRez-3;} //если нет, то просто убавляем чуть-чуть, чтобы было не впритирку
-		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
+		}
+		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
-//	inerthDif=0;
 }
-//===функция доводки скролла до целого слайда - для десктопа====КОНЕЦ
+//===функция доводки скролла до целого слайда с указанием направления движения - для десктопа====КОНЕЦ
+
+
+//===функция доводки скролла до целого слайда без указания направления движения - для десктопа====НАЧАЛО
+//получает: скролл-контейнер, массив слайдов
+function mouseSwap2(scrolCont, slide){
+	let sclLeft = scrolCont.scrollLeft; //величина текущего скролла
+	let contWidth = scrolCont.offsetWidth; //ширина окна контейнера
+	let contLeft = scrolCont.offsetLeft; //левая координата окна контейнера
+
+	let scrolRez;
+	let j = 0;
+	if(slide[1].offsetWidth>(contWidth/2)){ //если слайд шире половины окна, ставим его по центру
+		let apprx=9999999;
+		for (j; j < slide.length; j++) {		
+			let tmp = Math.abs((sclLeft+(contWidth/2))-((slide[j].offsetWidth/2)+(slide[j].offsetLeft-contLeft)));
+			if (apprx>tmp){apprx=tmp;}else{	break;}
+		}
+		j--;
+		scrolRez = ((slide[j].offsetLeft-contLeft)-((contWidth-slide[j].offsetWidth)/2));
+	}else{
+		let leftSlide;
+		let rightSlide;
+		let tmpL;
+		let tmpR;
+		for (j = 0; j < slide.length; j++) {
+			let tmp=(slide[j].offsetLeft-contLeft)+slide[j].offsetWidth-sclLeft;
+			if((tmp>0)&&(leftSlide==null)){
+				leftSlide = j;
+				tmpL=tmp;
+			}
+			tmp=(slide[j].offsetLeft-contLeft)+slide[j].offsetWidth-(sclLeft+contWidth);
+			if((tmp> -3)&&(rightSlide==null)){
+				rightSlide = j;
+				tmpR=(sclLeft+contWidth)-(slide[j].offsetLeft-contLeft);
+			}
+			if((!!leftSlide)&&(!!rightSlide)){break;}
+		}
+		if(tmpL>tmpR){
+			scrolRez=slide[leftSlide].offsetLeft-contLeft;
+		}else{
+			scrolRez=(slide[rightSlide].offsetLeft-contLeft+slide[rightSlide].offsetWidth)-contWidth+3;
+		}
+	}
+	scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
+}
+//===функция доводки скролла до целого слайда без указания направления движения - для десктопа====КОНЕЦ
 
 
 //===установка доводки скролла по событию скролла - для сенсорных устройств====НАЧАЛО
@@ -264,7 +319,7 @@ console.log('pointerDOWN');
 //===установка доводки скролла для скролл-контейнера====КОНЕЦ
 
 let mouseArrowFlag=true;//флаг блокировки от скролла от кнопок
-//===функция доводки скролла до целого слайда  - для сенсорных устройств====НАЧАЛО
+//===функция доводки скролла до целого слайда с указанием направления движения - для сенсорных устройств====НАЧАЛО
 //получает: скролл-контейнер, массив слайдов, направление: true-влево, инерция - если не нужна, ставим 0
 function toSlow(scrolCont, slide, leftDir, inerthDif){
 	if(mouseArrowFlag==true){
@@ -308,7 +363,7 @@ function toSlow(scrolCont, slide, leftDir, inerthDif){
 		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});
 	}
 }
-//===функция доводки скролла до целого слайда - для сенсорных устройств====КОНЕЦ
+//===функция доводки скролла до целого слайда с указанием направления движения - для сенсорных устройств====КОНЕЦ
 
 
 //====запуск видео на проигрывание===----здесь не применяется
