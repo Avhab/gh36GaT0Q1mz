@@ -58,9 +58,7 @@ let Group3701 = assist.querySelector(".Group3701");
 let Frame3961 = assist.querySelector(".Frame3961");
 
 
-//var svg = document.getElementById('Frame3961');//получил DOM SVG
-	console.log (Frame3961);
-
+/*
 Frame3961.addEventListener("load",function(){
 	let scd = Frame3961.contentDocument;
 	console.log (scd);
@@ -69,7 +67,7 @@ Frame3961.addEventListener("load",function(){
 	
 	}, false);
 
-
+*/
 
 
 
@@ -107,11 +105,16 @@ assist.onclick = function() {
 			Frame3961.style.opacity = "1";}, 10);
 		break;
 	  case 3:
-		let scd = Frame3961.contentDocument;
-		console.log (scd);
-		let g1119 = scd.querySelector('#g1119');
-		console.log (g1119);
-		g1119.style.opacity = "0";
+		let scdFrame3961 = Frame3961.contentDocument;
+		scdFrame3961.style.transitionDuration = "2s";
+		console.log (scdFrame3961);
+		let bonesGr = scdFrame3961.querySelector('#g1379');
+		console.log (bonesGr);
+		bonesGr.style.opacity = "0";
+	  case 4:
+		let venusGr = scdFrame3961.querySelector('#g128');
+		console.log (venusGr);
+		venusGr.style.opacity = "0.5";
 
 	}
 
