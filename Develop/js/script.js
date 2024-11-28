@@ -56,18 +56,22 @@ for (let i = 0; i < grImg.length; i++) {
 let clkCount=0;
 let Group3701 = assist.querySelector(".Group3701");
 let Frame3961 = assist.querySelector(".Frame3961");
+let scdFrame3961;
+let bonesGr;
 
-
-/*
 Frame3961.addEventListener("load",function(){
-	let scd = Frame3961.contentDocument;
-	console.log (scd);
-	let g1119 = scd.querySelector('#g1119');
-	console.log (g1119);
+	
+	scdFrame3961 = Frame3961.contentDocument;
+	console.log (scdFrame3961);
+
+//	scdFrame3961.style.transitionDuration = "2s";
+
+	bonesGr = scdFrame3961.querySelector('#g1379');
+	console.log (bonesGr);
+
 	
 	}, false);
 
-*/
 
 
 
@@ -105,11 +109,14 @@ assist.onclick = function() {
 			Frame3961.style.opacity = "1";}, 10);
 		break;
 	  case 3:
-		let scdFrame3961 = Frame3961.contentDocument;
-		scdFrame3961.style.transitionDuration = "2s";
+	  /*
+		scdFrame3961 = Frame3961.contentDocument;
 		console.log (scdFrame3961);
+
+		scdFrame3961.style.transitionDuration = "2s";
 		let bonesGr = scdFrame3961.querySelector('#g1379');
 		console.log (bonesGr);
+		*/
 		bonesGr.style.opacity = "0";
 		
 	}
