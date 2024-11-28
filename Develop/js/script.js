@@ -115,7 +115,7 @@ assist.onclick = function() {
 	  case 4:
 		let venusGr = scdFrame3961.querySelector('#g128');
 		console.log (venusGr);
-		venusGr.style.opacity = "0.5z";
+		venusGr.style.opacity = "0.5";
 
 	}
 
