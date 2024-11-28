@@ -70,9 +70,9 @@ Frame3961.addEventListener("load",function(){
 	venusGr.style.opacity = "0.05";
 	console.log (bonesGr);
 
-	scdFrame3961.style.transitionDuration = "2s";
+	setTimeout( function() {scdFrame3961.style.transitionDuration = "2s";}, 2000);
 	
-	}, false);
+}, false);
 
 
 
