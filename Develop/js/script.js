@@ -57,6 +57,7 @@ let clkCount=0;
 let Group3701 = assist.querySelector(".Group3701");
 let Frame3961 = assist.querySelector(".Frame3961");
 
+let scdFrame3961;
 
 /*
 Frame3961.addEventListener("load",function(){
@@ -105,7 +106,7 @@ assist.onclick = function() {
 			Frame3961.style.opacity = "1";}, 10);
 		break;
 	  case 3:
-		let scdFrame3961 = Frame3961.contentDocument;
+		scdFrame3961 = Frame3961.contentDocument;
 		scdFrame3961.style.transitionDuration = "2s";
 		console.log (scdFrame3961);
 		let bonesGr = scdFrame3961.querySelector('#g1379');
@@ -114,7 +115,7 @@ assist.onclick = function() {
 	  case 4:
 		let venusGr = scdFrame3961.querySelector('#g128');
 		console.log (venusGr);
-		venusGr.style.opacity = "0.5";
+		venusGr.style.opacity = "0.5z";
 
 	}
 
