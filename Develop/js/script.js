@@ -65,7 +65,7 @@ Frame3961.addEventListener("load",function(){
 	scdFrame3961 = Frame3961.contentDocument;
 	console.log (scdFrame3961);
 
-//	scdFrame3961.style.transitionDuration = "2s";
+	scdFrame3961.style.transitionDuration = "2s";
 
 	bonesGr = scdFrame3961.querySelector('#g1379');
 	venusGr = scdFrame3961.querySelector('#g128');
