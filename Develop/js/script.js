@@ -69,6 +69,7 @@ Frame3961.addEventListener("load",function(){
 
 	bonesGr = scdFrame3961.querySelector('#g1379');
 	venusGr = scdFrame3961.querySelector('#g128');
+	venusGr.style.opacity = "0.05";
 	console.log (bonesGr);
 
 	
