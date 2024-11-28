@@ -107,27 +107,11 @@ assist.onclick = function() {
 			Frame3961.style.opacity = "1";}, 10);
 		break;
 	  case 3:
-//		let svgObj = Frame3961.querySelector("svg");
-//		console.log (svgObj);
-
-
-
-
-//		const svgDocument = document.querySelector('object').contentDocument;
-
-		
-//		let g1119 = svgDocument.querySelector('#g1119');
-
-
-/*
-const svgDocument = document.querySelector('object').contentDocument;
-const element = svgDocument.querySelector('здесь указываете нужный id или что там вам надо');
-*/
-
-	
-//		let g1119 = Frame3961.getElementById("g1119");
-//		console.log (g1119);
-
+		let scd = Frame3961.contentDocument;
+		console.log (scd);
+		let g1119 = scd.querySelector('#g1119');
+		console.log (g1119);
+		g1119.style.opacity = "0";
 
 	}
 
