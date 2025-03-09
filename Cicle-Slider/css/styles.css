@@ -1,0 +1,96 @@
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 300;
+  font-style: normal;
+  src: url(../fonts/Montserrat-Light.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-style: normal;
+  src: url(../fonts/Montserrat-Regular.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-style: normal;
+  src: url(../fonts/Montserrat-Medium.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 600;
+  font-style: normal;
+  src: url(../fonts/Montserrat-SemiBold.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-style: normal;
+  src: url(../fonts/Montserrat-Bold.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 800;
+  font-style: normal;
+  src: url(../fonts/Montserrat-ExtraBold.ttf);}
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: 900;
+  font-style: normal;
+  src: url(../fonts/Montserrat-Black.ttf);}
+
+
+html {font-size:24px;}
+
+body {background:#FFF;color:#000;
+font-family: 'Montserrat', 'Verdana', 'Noto Sans Arabic', 'Noto Sans Hebrew', 'sans-serif';
+font-size:1rem;font-weight:400;letter-spacing:0;text-align:left;}
+.wrapG {display:block;max-width:1890px;margin:0 auto;padding:0 10px;}
+ 
+body * {box-sizing:border-box;}
+ 
+.hCont {display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;gap:1rem;}
+.hCont1 {display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:2rem;}
+.hCont2 {display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:start;gap:0;}
+.hCont3 {display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:0;}
+.vCont {display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;gap:0;flex-direction:column;}
+.vCont1 {display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:start;gap:0;flex-direction:column;}
+.hContSt {display:flex;justify-content:start;flex-wrap:wrap;align-items:stretch;gap:1rem;}
+.vContSt {display:flex;justify-content:start;flex-wrap:wrap;align-items:stretch;gap:1rem;flex-direction:column;}
+
+h1 {font-weight:600;font-size:2.5rem;line-height:2.75rem;color:#000;margin-bottom:2rem;text-transform:uppercase;}
+h2 {font-weight:600;font-size:2.25rem;line-height:2.75rem;color:#090909;margin-bottom:2rem;}
+
+a {text-decoration:none;color:inherit;}
+b {font-weight:700;}
+p {margin-bottom:1em;}
+
+
+
+
+
+
+.superoven {height:720px;position:relative;margin:50px auto;}
+.superoven .slideCont {width:100%;height:100%;cursor:grab;cursor:pointer; /*margin:0 auto;max-width:700px;max-height:400px;*/
+display:flex;justify-content:start;align-items:center;flex-wrap:nowrap;
+white-space:nowrap;overflow-x:visible;overflow-y:hidden;
+touch-action:auto;
+}
+.superoven .slideCont>div {width:100%;height:100%;position:relative;/*overflow:hidden;*/z-index:10;
+display:flex;justify-content:start;align-items:center;white-space:normal;flex-shrink:0;}
+.superoven .slideCont::-webkit-scrollbar {width:0;height: 0;}
+.superoven .slideCont {-ms-overflow-style: none;scrollbar-width: none;overflow: -moz-scrollbars-none;}
+.superoven .slideCont>div img {width:100%;min-height:100%;object-fit:cover;filter: contrast(1.2) brightness(0.8);}
+.superoven .slideCont>div::after {content:"";position:absolute;z-index:5;top:0;left:0;height:100%;width:100%;background: rgba(0, 0, 0, 0.15);background: #12579488;
+background: linear-gradient(0deg, #00000088 0%, #00000000 30%, #00000000 70%, #00000088 100%);
+}
+.superoven .slideCont .descr {position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);z-index:2;
+color:white;text-align:center;font-weight:600;width:100%;}
+.superoven .slideCont .descr1 {font-size:40px;text-transform:uppercase;margin-bottom:20px;}
+.superoven .slideCont .descr2 {font-size:24px;}
+.superoven .dots {height:8px;position:absolute;left:18px;bottom:28px;z-index:20;
+display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;}
+.superoven .dots>div {display:block;width:20px;height:20px;cursor:pointer;display:flex;justify-content:center;align-items:center;}
+.superoven .dots>div::after {content:"";height:8px;width:8px;border-radius:50%;background:#FFF;opacity:0.32;}
+.superoven .dots>div.marked::after {opacity:1;}
+
+@media (max-width:1000px) {.superoven {height:620px;}}
+@media (max-width:800px) {.superoven {height:520px;}}
+
+
+
