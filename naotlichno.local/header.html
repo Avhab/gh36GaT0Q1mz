@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>naotlichno</title>
+
+  <link type = "text/css" rel="stylesheet" href="css/reset.css">
+  <link type = "text/css" rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<header>
+	<div class="wideCont">
+		<div class="menuH1cont">
+			<div class="wrapG">
+				<div class="menuH1 hCont">
+					<a class="logo" href="index.php"><img src="images/logo.png"></a>
+					<a class="navL" href="index.php#odintsovo">
+						<div class="hCont">
+							<img src="images/navL.svg">
+							<div>Одинцово</div>
+						</div>
+					</a>
+					<?php include "menuH1part.html"; ?>
+					<?php include "askCall.html"; ?>
+				</div>
+			</div>
+		</div>
+		<?php include "menuH2.html"; ?>
+	</div>
+
+	<div class="burgerCont">
+		<div class="burger"><div class="burgerBut"></div></div>
+		<div class="burgerMenu vCont">
+			<?php include "menuH2.html"; ?>
+			<?php include "menuH1part.html"; ?>
+		</div>
+	</div>
+</header>
