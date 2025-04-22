@@ -48,7 +48,7 @@ if (superoven){
 		if (dots){
 			let dot = document.createElement("div");
 			dots.append(dot);
-			dot.onclick = function(e){curNum = i; scrolNStep(0);	}	}	}
+			dot.onclick = function(e){curNum = i; scrolNStep();	}	}	}
 
 	let dot = superoven.querySelectorAll(".dots>div");
 	let curNum=0;	//порядковый номер текущего слайда
@@ -56,44 +56,71 @@ if (superoven){
 	let movCnt=0; //для пропуска событий mousemove
 	let rolBlck = true;//флаг блокировки свайпа слайдов мышью
 	let dragM = false;
-	let startX; //стартовая позиция мыши
+//	let startX; //стартовая позиция мыши
+	let startSL = slideCont.scrollLeft; //стартовая позиция скролла
 	let curX; //текущая позиция мыши
 	let transDur = 300;
 
-window.onload = () => {
-	setTimeout( function() {
-		slideCont.prepend(slide[(slide.length - 1)]);
-		slideCont.scrollLeft = slideCont.offsetWidth;
-	}, 500);
-};
+	//формула вычисления scrollLeft для установки текущего слайда curNum посередине контейнера
+	function centrCurSlide() {return (slide[curNum].offsetLeft - slideCont.offsetLeft - ((slideCont.offsetWidth - slide[curNum].offsetWidth)/2));}
 
-//ротация слайдов при необходимости и плавный свайп к слайду curNum
-	function scrolNStep(slidShift) {
-//-автоматическая ротация слайда. Происходит, если будущий (на который указывает модифицированный curNum) слайд стоит на краю.
-		let tranSlide = slideCont.querySelectorAll(".slideCont>div");
-		let tmp = Math.round((slide[curNum].offsetLeft - slideCont.offsetLeft)/slideCont.offsetWidth);
-		if(tmp == 0){
-			slideCont.prepend(tranSlide[(tranSlide.length - 1)]);
-			slideCont.scrollLeft = slide[curNum].offsetLeft - slideCont.offsetLeft + slideCont.offsetWidth + slidShift;
-		}else{
-			if(tmp == (tranSlide.length - 1)){
-				slideCont.append(tranSlide[0]);
-				slideCont.scrollLeft = slide[curNum].offsetLeft - slideCont.offsetLeft - slideCont.offsetWidth + slidShift;	}	}
-//плавный свайп к слайду curNum
-		slideCont.scrollTo({left: (slide[curNum].offsetLeft - slideCont.offsetLeft), behavior: 'smooth'});
-//модификация точек по curNum
+	window.onload = () => {
+		setTimeout( function() {
+			slideCont.prepend(slide[(slide.length - 1)]);
+			slideCont.scrollLeft = centrCurSlide();
+		}, 500);
+	};
+	dotModif();
+
+	//модификация точек по curNum
+	function dotModif() {
 		for (let i = 0; i < dot.length; i++) {
-			if(i==curNum){dot[i].classList.add("marked");}else{dot[i].classList.remove("marked");}	}
-//Разблокируем свайп
-		rolBlck = true;	}
+			if(i==curNum){dot[i].classList.add("marked");}else{dot[i].classList.remove("marked");}	}	}
 
+	//ротация слайдов при необходимости и плавный свайп к слайду curNum
+	function scrolNStep() {
+	//-автоматическая ротация слайда. Происходит, если будущий (на который указывает модифицированный curNum) слайд стоит на краю.
+		let tranSlide = slideCont.querySelectorAll(".slideCont>div"); //задаем массив слайдов для индексации по текущему положению
+	//определяем место, где находится слайд curNum /вычисляем его индекс/
+		let tmp = Math.round((slide[curNum].offsetLeft - slideCont.offsetLeft)/slide[curNum].offsetWidth);
+		//если он впереди - индекс равен нулю - переносим последний слайд вперед
+		if(tmp == 0){carForw(tranSlide);
+		}else{
+			//если он на последнем месте - индекс равен length-1  - переносим первый слайд назад
+			if(tmp == (tranSlide.length - 1)){carBackw(tranSlide);}	}
+		//затем выполняем плавный свайп к слайду curNum
+		slideCont.scrollTo({left: centrCurSlide(), behavior: 'smooth'});
+		dotModif();//модификация точек по curNum
+		rolBlck = true;	}//Разблокируем свайп
 
+//перенос последнего слайда вперед. Получает текущий массив слайдов
+	function carForw(tranSlide) {
+		slideCont.prepend(tranSlide[(tranSlide.length - 1)]);//переносим последний по текущему положению слайд вперед
+		slideCont.scrollLeft = slideCont.scrollLeft + tranSlide[(tranSlide.length - 1)].offsetWidth;//и корректируем scrollLeft на длину перенесенного слайда
+	}
+
+//перенос первого слайда назад. Получает текущий массив слайдов
+	function carBackw(tranSlide) {
+		slideCont.append(tranSlide[0]);//переносим первый по текущему положению слайд назад
+		slideCont.scrollLeft = slideCont.scrollLeft - tranSlide[0].offsetWidth;//и корректируем scrollLeft на длину перенесенного слайда
+	}
+
+//проверка приближения конца свайпа до менее 10px, и если необходимо, перенос соответствующего крайнего слайда
+	function carryOver() {
+		if(slideCont.scrollLeft<10){
+			let tranSlide = slideCont.querySelectorAll(".slideCont>div"); //задаем массив слайдов для индексации по текущему положению
+			carForw(tranSlide);
+		}else{
+			if((slideCont.scrollWidth - slideCont.scrollLeft - slideCont.offsetWidth)<10){
+				let tranSlide = slideCont.querySelectorAll(".slideCont>div"); //задаем массив слайдов для индексации по текущему положению
+				carBackw(tranSlide);	}	}	}
 
 //старт свайпа на контейнере
 	function StartSwipe(e) {
 		if (rolBlck==true){
 //			e.preventDefault();
-			startX=e.pageX;
+			startSL = slideCont.scrollLeft;
+//			startX=e.pageX;
 			curX=e.pageX;
 			dragM = true;
 			curSlShift = slide[curNum].offsetLeft - slideCont.offsetLeft;	}	}
@@ -104,23 +131,32 @@ window.onload = () => {
 			movCnt=0; //задает скважность пропуска событий mousemove
 			if((dragM==true)&&(rolBlck==true)){
 				slideCont.scrollLeft = slideCont.scrollLeft + curX - e.pageX;
+//				carryOver();
 				curX = e.pageX;		}
 		}else{movCnt--;}	}
 
 //конец свайпа на документе
-	function EndSwipe() {
+	function EndSwipe(e) {
 		if((dragM==true)&&(rolBlck==true)){
 			dragM=false;
 			rolBlck=false;
-			let num = 0;
-			if (((Math.abs(startX - curX))/slideCont.offsetWidth)>0.1) {
-				if((startX - curX)>0){num = 1;// если разность положительная - скролл влево
-				}else{num = -1;}	}		// если разность отрицательная - скролл вправо
-//коррекция порядкового номера текущего слайда. Получает movStep, -1 < num < 1
-			curNum = curNum + num;
-			if (curNum<0){curNum = slide.length - 1;}else{if (curNum>(slide.length - 1)){curNum = 0;}	}
-//свайп к слайду curNum
-			scrolNStep(startX - curX);		}	}
+			curX = e.pageX;
+//			let regMove = (Math.abs(startX - curX))/slide[curNum].offsetWidth;//смещение мыши относительно размеров слайда
+			let regMove = (Math.abs(slideCont.scrollLeft - startSL))/slide[curNum].offsetWidth;//смещение скролла относительно размеров слайда
+
+			if (regMove>0.1) {	//если более 0,1 выполняем переключение слайда
+				if (regMove<1) {	//если менее 1 - смещение на один слайд
+//					curNum = curNum + Math.sign(startX - curX);	//1 плюс, либо минус. В зависимости от знака смещения мыши
+					curNum = curNum + Math.sign(slideCont.scrollLeft - startSL);	//1 плюс, либо минус. В зависимости от знака смещения скролла
+
+					if (curNum<0){curNum = slide.length - 1;}else{if (curNum>(slide.length - 1)){curNum = 0;}} //закольцовка переключения
+				}else{	//если более 1 - переключение на ближайший к середине слайд 
+					let closest = 65530;
+					for (let i = 0; i < slide.length; i++) {//находим слайд, ближайший к середине
+						let tmp = Math.abs((slideCont.scrollLeft + (slideCont.offsetWidth - slide[i].offsetWidth)/2) - slide[i].offsetLeft);
+						if (tmp<closest){closest = tmp;curNum = i;}	}}}
+			//свайп к слайду curNum
+			scrolNStep();	}	}
 
 
 
@@ -150,7 +186,7 @@ if(isTouchDevice==true){
 	slideCont.ontouchend = function(e) {
 		e.preventDefault();
 //		console.log("touchend");
-		EndSwipe();
+		EndSwipe(e.changedTouches[0]);
 	}
 
 	slideCont.ontouchcancel = function(e) {
@@ -167,6 +203,7 @@ if(isTouchDevice==true){
 
 //нажатие мыши на контейнере
 	slideCont.onmousedown = function(e){
+		e.preventDefault();
 		StartSwipe(e);
 	}
 //перемещение нажатой мыши на документе
@@ -175,8 +212,8 @@ if(isTouchDevice==true){
 	});
 
 //отпускание мыши на документе
-	document.addEventListener("mouseup", function() {
-		EndSwipe();
+	document.addEventListener("mouseup", function(e) {
+		EndSwipe(e);
 	});
 }
 
