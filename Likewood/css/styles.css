@@ -449,7 +449,7 @@ footer .row1 .colm:first-child {padding-left:0;width:calc(25% - 0.666*1.9375rem)
 footer .row1 .colm:last-child {padding-right:0;width:calc(25% - 0.666*1.9375rem);}
 footer .row2, footer .chkLab {font-family: 'Circe';font-weight:350;font-size:1rem;font-size:16px;line-height:normal;letter-spacing:0;}
 footer .row2 .wrapG {height:70px;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:0;padding:0.5rem 10px;}
-footer .tit {color:#A98054;font-weight:700;font-size:1.25rem;line-height:1.7rem;margin-bottom:0.7rem;}
+footer .tit {color:#A98054;font-weight:700;margin-bottom:0.7rem;}
 footer .colm4 .tit {color:#FFF;}
 footer .row2 .wrapG>* {max-width:280px;}
 footer .row2 .wrapG>*:last-child {text-align:right;}
