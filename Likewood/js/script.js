@@ -141,7 +141,7 @@ for (let i = 0; i < forms.length; i++) {
 
 
 
-let horScrol = document.querySelectorAll(".horScrol-1");
+let horScrol = document.querySelectorAll(".horScrol");
 for (let i = 0; i < horScrol.length; i++) {
 	if (horScrol[i]){
 		let slideCont = horScrol[i].querySelector(".horScrol>.slideCont");
@@ -196,33 +196,134 @@ for (let i = 0; i < horScrol.length; i++) {
 			if((dragM==true)&&(rolBlck==true)){
 				dragM=false;
 				rolBlck=false;
-				for (let i = 0; i < slide.length; i++) {
-					let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
-					if (diff>0){
-						if((slide[i].offsetWidth/diff)<2){
-							curNum = i;
-							break;
-						}
-					}
-				}
 				//костыль: если скролл закончился, то свайп не выполняем
 				if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
+					for (let i = 0; i < slide.length; i++) {
+						let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
+						if (diff>0){
+							if((slide[i].offsetWidth/diff)<2){
+								curNum = i;
+								break;
+							}
+						}
+					}
 					scrolNStep();//свайп к слайду curNum
 				}
 				rolBlck = true;//Разблокируем свайп
 			}	}
 
-	//========= События тачскрина ==============
-
-	/*
+	
+//задание наборов событий тачскрина, либо мыши
 	let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
 	if(isTouchDevice==true){
-		console.log("isTouchDevice");
-	}else{
-		console.log("NOTouch");
-	}
-	*/
+//		console.log("isTouchDevice");
 
+//========= События тачскрина ==============
+		let timerId=null;
+		let isNatSwipe = true;
+		
+		function SwipeTune() {
+			if (timerId!=null){clearTimeout(timerId);}
+			timerId = setTimeout( function() {
+				timerId=null;
+				console.log("scroll TimeOut");
+				if ((isNatSwipe==true)&&(dragM==false)){
+					//костыль: если скролл закончился, то свайп не выполняем
+					if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
+						for (let i = 0; i < slide.length; i++) {
+							let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
+							if (diff>0){
+								if((slide[i].offsetWidth/diff)<2){
+									curNum = i;
+									break;
+								}
+							}
+						}
+						isNatSwipe=false;
+						setTimeout( function() {
+							isNatSwipe=true;
+						}, 500);
+						scrolNStep();//свайп к слайду curNum
+					}
+					
+				}
+			}, 50);
+		}
+
+		slideCont.addEventListener('scroll', function() {
+			console.log("0 scroll");
+			SwipeTune();
+		});
+
+
+
+
+
+//--------------------------
+		slideCont.addEventListener("touchstart", function(e) {
+//			console.log("1 touchstart");
+			dragM = true;
+//			e.preventDefault();
+//			StartSwipe(e.changedTouches[0]);
+		});
+
+		slideCont.addEventListener("touchmove", function(e) {
+//			console.log("2 touchmove");
+//			e.preventDefault();
+//			MoveSwipe(e.changedTouches[0]);
+		});
+
+		slideCont.addEventListener("touchend", function(e) {
+//			console.log("3 touchend");
+			dragM = false;
+			SwipeTune();
+//			e.preventDefault();
+//			EndSwipe(e.changedTouches[0]);
+		});
+
+		slideCont.addEventListener("touchcancel", function(e) {
+//			console.log("4 touchcancel");
+			dragM = false;
+			SwipeTune();
+//			e.preventDefault();
+		});
+	}else{
+//		console.log("NOTouch");
+
+	//========= События десктопа ==============
+
+	//нажатие мыши на контейнере
+		slideCont.addEventListener("mousedown", function(e) {
+//			console.log("1 mousedown");
+			e.preventDefault();
+			StartSwipe(e);
+		});
+
+	//перемещение нажатой мыши на документе
+		document.addEventListener("mousemove", function(e) {
+//			console.log("2 mousemove");
+			MoveSwipe(e);
+		});
+
+	//отпускание мыши на документе
+		document.addEventListener("mouseup", function(e) {
+//			console.log("3 mouseup");
+			EndSwipe(e);
+		});
+
+
+/*		
+	//выход мыши за пределы слайдера
+		slideCont.addEventListener("mouseout", function(e) {
+			EndSwipe(e);
+		});
+		*/
+	//============================================
+		
+	}
+
+
+/*
 		slideCont.ontouchstart = function(e) {
 	//		console.log("1 ontouchstart");
 			e.preventDefault();
@@ -249,38 +350,21 @@ for (let i = 0; i < horScrol.length; i++) {
 			e.preventDefault();
 	//		console.log("touchcancel");
 		}
+*/
+//======================================
 
 
 	//============================================
 
 
 
-	//========= События десктопа ==============
-
-	//нажатие мыши на контейнере
+/*
 		slideCont.onmousedown = function(e){
-	//		console.log("1 onmousedown");
 			e.preventDefault();
 			StartSwipe(e);
 		}
-	//перемещение нажатой мыши на документе
-		document.addEventListener("mousemove", function(e) {
-	//		console.log("2 mousemove");
-			MoveSwipe(e);
-		});
+*/
 
-	//отпускание мыши на документе
-		document.addEventListener("mouseup", function(e) {
-	//		console.log("3 mouseup");
-			EndSwipe(e);
-		});
-/*		
-	//выход мыши за пределы слайдера
-		slideCont.addEventListener("mouseout", function(e) {
-			EndSwipe(e);
-		});
-		*/
-	//============================================
 
 	}
 	//============================================
