@@ -138,61 +138,10 @@ for (let i = 0; i < forms.length; i++) {
 }
 //-----------------блокировка формы по чекбоксу соглашения
 
-/*
-//======перебор контейнеров комплектов горизонтального скролла horScrol и создание переменных контейнера слайдов и стрелок-----НАЧАЛО
-let horScrol = document.querySelectorAll(".horScrol");
-for (let i = 0; i < horScrol.length; i++) {
-	let scrolCont = horScrol[i].querySelector(".horScrol>.scrolCont");
-	let dirFlag;
-	let sCoord = scrolCont.scrollLeft; 
-//=======================
-	let slide = scrolCont.querySelectorAll(".horScrol>.scrolCont>*");
-	let arrLeft = horScrol[i].querySelector(".leftArr");
-	let arrRight = horScrol[i].querySelector(".rightArr");
-	let idTimSet;
-	
-	if (arrRight) {	arrRight.onclick = function(){stepScrollLeft();}	}
-	if (arrLeft) {	arrLeft.onclick = function(){stepScrollRight();}	}
-
-//======скролл функциональными кнопками-----НАЧАЛО
-	function stepScrollLeft() {
-		mouseArrowFlag=false;
-		clearTimeout(idTimSet);
-		idTimSet = setTimeout( function() {mouseArrowFlag=true;}, 800);
-		
-		let sclLeft = scrolCont.scrollLeft; 
-		let contWidth = scrolCont.offsetWidth;
-		let contLeft = scrolCont.offsetLeft;
-		let scrolRez;
-		for (let j = 0; j < slide.length; j++) {
-			scrolRez = slide[j].offsetLeft-contLeft;
-			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez--;}
-			if((((slide[j].offsetLeft-contLeft) + slide[j].offsetWidth)-(sclLeft+contWidth))>5){break;}		}
-		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
-
-	function stepScrollRight() {
-		mouseArrowFlag=false;
-		clearTimeout(idTimSet);
-		idTimSet = setTimeout( function() {mouseArrowFlag=true;}, 800);
-
-		let sclLeft = scrolCont.scrollLeft; 
-		let contWidth = scrolCont.offsetWidth;
-		let contLeft = scrolCont.offsetLeft;
-		let scrolRez;
-		for (let j = (slide.length - 1); j >= 0; j--) {
-			scrolRez = ((slide[j].offsetLeft-contLeft)+slide[j].offsetWidth)-contWidth;
-			if(slide[j].offsetWidth<contWidth){scrolRez = scrolRez++;}
-			if((sclLeft-(slide[j].offsetLeft-contLeft))>5){break;}		}
-		scrolCont.scrollTo({left: scrolRez, behavior: 'smooth'});	}
-//======скролл функциональными кнопками-----КОНЕЦ
 
 
-}
-//======перебор контейнеров комплектов горизонтального скролла horScrol и создание переменных контейнера слайдов и стрелок-----КОНЕЦ
-*/
 
-
-let horScrol = document.querySelectorAll(".horScrol");
+let horScrol = document.querySelectorAll(".horScrol-1");
 for (let i = 0; i < horScrol.length; i++) {
 	if (horScrol[i]){
 		let slideCont = horScrol[i].querySelector(".horScrol>.slideCont");
