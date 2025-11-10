@@ -100,24 +100,6 @@ for (let j = 0; j < phoneInput.length; j++) {
 }
 
 
-
-let forms = document.querySelectorAll("form");
-for (let i = 0; i < forms.length; i++) {
-	let agrChk = forms[i].querySelector(".agrChk");
-	if (agrChk) {
-		forms[i].addEventListener('submit', function(evt) {
-			evt.preventDefault();
-			if(!agrChk.checked) {
-				return;
-				}
-			this.submit();
-		});
-	}
-}
-
-
-
-
 let hScrolls = document.querySelectorAll(".horScrol");
 for (let i = 0; i < hScrolls.length; i++) {
 	let hScroll = hScrolls[i];
@@ -179,7 +161,7 @@ for (let i = 0; i < hScrolls.length; i++) {
 		function CalCurNum() {
 			for (let i = 0; i < slide.length; i++) {
 				let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
-				if (diff>0){
+				if (diff>2){
 					if((slide[i].offsetWidth/diff)<2){
 						curNum = i;
 						break;	}	}	}	}
