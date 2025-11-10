@@ -303,9 +303,9 @@
 			<input type="text" name="Ваше_имя" required placeholder="Ваше имя">
 			<input type="tel" name="Phone" required placeholder="Ваш телефон" pattern="^[0-9\-\+\\ ]+$">
 			<!-- ВНИМАНИЕ - проверьте id - должен быть уникальным в пределах страницы -->
-			<input type="checkbox" id="chckbx-letC" class="agrChk">
+			<input type="checkbox" id="chckbx-letC" class="agrChk" onchange="document.getElementById('submit02').disabled = !this.checked;">
 			<label for="chckbx-letC" class="chkLab"><div>Нажимая на "Отправить", я соглашаюсь на обработку <span>персональных данных</span></div></label>
-			<input class="buttn" type="submit" value="Отправить">
+			<input class="buttn" disabled type="submit" id="submit02" value="Отправить">
 		</form>
 	</article>
 </div>
@@ -344,9 +344,9 @@
 					<input type="text" name="Ваше_имя" required placeholder="Ваше имя">
 					<input type="tel" name="Phone" required placeholder="Ваш телефон" pattern="^[0-9\-\+\\ ]+$">
 					<!-- ВНИМАНИЕ - проверьте id - должен быть уникальным в пределах страницы -->
-					<input type="checkbox" id="chckbx-foot" class="agrChk">
+					<input type="checkbox" id="chckbx-foot" class="agrChk" onchange="document.getElementById('submit01').disabled = !this.checked;">
 					<label for="chckbx-foot" class="chkLab"><div>Нажимая на "Отправить", я соглашаюсь на обработку <span>персональных данных и с условиями оферты</span></div></label>
-					<input class="buttn finalBut" type="submit" value="Отправить">
+					<input class="buttn finalBut" disabled type="submit" id="submit01" value="Отправить">
 				</form>
 			</div>
 		</div>
