@@ -1,20 +1,4 @@
 let body = document.querySelector("body");
-
-/*<----тестовый вывод размеров окна*/
-let sizDisp = document.createElement("div");
-body.append(sizDisp);
-sizDisp.style.cssText = "position:fixed;top:150px;left:2px;background:white;color:black;padding:0 5px;border: 1px solid red;";
-function sdReN() {
-	sizDisp.innerHTML = `${window.innerWidth} x ${window.innerHeight}`;
-	if (window.innerWidth<900) {sizDisp.style.fontSize = `${window.innerWidth/20}px`;} else {
-		sizDisp.style.fontSize = `${window.innerWidth/70}px`;}
-	}
-sdReN();
-window.addEventListener("resize", function (e) {sdReN(); });
-/*тестовый вывод размеров окна---->*/
-
-
-
 let blur = document.createElement("div");
 blur.classList.add('blur');
 body.prepend(blur);
@@ -27,10 +11,7 @@ burgerMenu.append(header.querySelector(".header-line02").cloneNode(true));
 burgerMenu.append(header.querySelector(".social-block").cloneNode(true));
 burgerMenu.append(header.querySelector(".telph-block").cloneNode(true));
 
-
-//blur.style.transformOrigin = "center top";
 blur.style.opacity = "0";
-//blur.style.transform = "scaleY(0)"; 
 blur.style.transitionDuration = "0.3s";
 burgerMenu.style.transformOrigin = "center top";
 burgerMenu.style.opacity = "0";
@@ -45,7 +26,6 @@ if(blur&&burger&&burgerMenu){
 				burgerMenu.style.display = "flex";
 				setTimeout( function() {
 					blur.style.opacity = "1";
-//					blur.style.transform = "scaleY(1)";
 					burgerMenu.style.opacity = "1";
 					burgerMenu.style.transform = "scaleY(1)";
 				}, 30);
@@ -54,7 +34,6 @@ if(blur&&burger&&burgerMenu){
 			if (flag == true) {
 				setTimeout( function() {flag = false; }, 30);
 				blur.style.opacity = "0";
-//				blur.style.transform = "scaleY(0)"; 
 				burgerMenu.style.opacity = "0";
 				burgerMenu.style.transform = "scaleY(0)"; 
 				setTimeout( function() {
@@ -62,11 +41,12 @@ if(blur&&burger&&burgerMenu){
 					burgerMenu.style.display=null;
 				}, 300);}});}
 
-//flow-banner========
+
 let flowBanner = document.querySelector('.flow-banner');
 if (flowBanner){
 	let clos = flowBanner.querySelector('.clos');
 	let buttn = flowBanner.querySelector('.buttn');
+	let ahref = flowBanner.querySelector('a');
 
 	function closBann() {
 		blur.style.opacity = "0";
@@ -74,8 +54,7 @@ if (flowBanner){
 		setTimeout( function() {
 			blur.style.display = "none";
 			flowBanner.style.display='none';
-		}, 400);
-	}
+		}, 400);	}
 
 	setTimeout( function() {
 		blur.style.display = "block";
@@ -84,15 +63,14 @@ if (flowBanner){
 			blur.style.opacity = "1";
 			flowBanner.style.transform='translate(50%, -50%) scale(1, 1)';
 			flowBanner.style.opacity='1';
-			clos.onclick = function(){
-				closBann();
-			}
+			clos.onclick = function(){	closBann();	}
+			ahref.onclick = function(){	closBann();	}
 		}, 100);
 	}, 5000);
 }
 
 
-//коррекция ввода номера телефона========
+
 let phoneInput = document.querySelectorAll('input[type="tel"]');
 for (let j = 0; j < phoneInput.length; j++) {
 	function appMask(event) {
@@ -120,9 +98,9 @@ for (let j = 0; j < phoneInput.length; j++) {
 	phoneInput[j].addEventListener("blur", appMask, false);
 	phoneInput[j].addEventListener("keydown", appMask, false)
 }
-//-------------коррекция ввода номера телефона
 
-//блокировка формы по чекбоксу соглашения =======================
+
+
 let forms = document.querySelectorAll("form");
 for (let i = 0; i < forms.length; i++) {
 	let agrChk = forms[i].querySelector(".agrChk");
@@ -136,237 +114,130 @@ for (let i = 0; i < forms.length; i++) {
 		});
 	}
 }
-//-----------------блокировка формы по чекбоксу соглашения
 
 
 
 
-let horScrol = document.querySelectorAll(".horScrol");
-for (let i = 0; i < horScrol.length; i++) {
-	if (horScrol[i]){
-		let slideCont = horScrol[i].querySelector(".horScrol>.slideCont");
-		let slide = slideCont.querySelectorAll(".horScrol>.slideCont>*");
-		
-		let leftArr = horScrol[i].querySelector(".horScrol>.arrBlock>.leftArr");
-		let rightArr = horScrol[i].querySelector(".horScrol>.arrBlock>.rightArr");
+let hScrolls = document.querySelectorAll(".horScrol");
+for (let i = 0; i < hScrolls.length; i++) {
+	let hScroll = hScrolls[i];
+	if (hScroll){
 
+		let slideCont = hScroll.querySelector(".slideCont");
+		let slide = slideCont.querySelectorAll(":scope>*");
+
+		let arrCont = hScroll.querySelector(".arrBlock");
+		let leftArr = arrCont.querySelector(".leftArr");
+		let rightArr = arrCont.querySelector(".rightArr");
+
+	
 		leftArr.onclick = function(e){
-			--curNum;if (curNum<0){curNum=0;}
+			--curNum;
+			if (curNum<0){curNum=0;}
 			scrolNStep();		}
 			
+	
 		rightArr.onclick = function(e){
-			//костыль: если скролл закончился, то свайп не выполняем
-			if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
-				++curNum;if (curNum>(slide.length - 1)){curNum=(slide.length - 1);}
-				scrolNStep();	}	}
+			if (scrolNotEnd()){ 
+				++curNum;
+				if (curNum>(slide.length - 1)){curNum=(slide.length - 1);}
+				scrolNStep();		}	}
 
-		//плавный свайп к слайду curNum
-		function scrolNStep() {
-			let tmp = slide[curNum].offsetLeft - slideCont.offsetLeft;
-			slideCont.scrollTo({left: tmp, behavior: 'smooth'});
-		}
-
-		let curNum=0;	//порядковый номер текущего слайда к которому выполняется скролл
-		let movCnt=0; //для пропуска событий mousemove
-		let rolBlck = true;//флаг блокировки свайпа слайдов мышью
+		let curNum=0;	
+		let movCnt=0; 
+		let rolBlck = true;
 		let dragM = false;
-		let startSL = slideCont.scrollLeft; //стартовая позиция скролла
-		let curX; //текущая позиция мыши
+		let startSL = slideCont.scrollLeft; 
+		let curX; 
 		let transDur = 300;
-
-	//старт свайпа на контейнере
+		
+	
 		function StartSwipe(e) {
 			if (rolBlck==true){
 				startSL = slideCont.scrollLeft;
 				curX=e.pageX;
-				dragM = true;
-				}	}
-
-	//движение свайпа на документе
+				dragM = true;	}	}
+	
 		function MoveSwipe(e) {
 			if(movCnt==0){
-				movCnt=0; //задает скважность пропуска событий mousemove
+				movCnt=0; 
 				if((dragM==true)&&(rolBlck==true)){
 					slideCont.scrollLeft = slideCont.scrollLeft + curX - e.pageX;
-	//				carryOver();
 					curX = e.pageX;		}
 			}else{movCnt--;}	}
-	//конец свайпа на документе 2222
+	
 		function EndSwipe(e) {
 			if((dragM==true)&&(rolBlck==true)){
 				dragM=false;
 				rolBlck=false;
-				//костыль: если скролл закончился, то свайп не выполняем
-				if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
-					for (let i = 0; i < slide.length; i++) {
-						let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
-						if (diff>0){
-							if((slide[i].offsetWidth/diff)<2){
-								curNum = i;
-								break;
-							}
-						}
-					}
-					scrolNStep();//свайп к слайду curNum
+				if (scrolNotEnd()){ 
+					CalCurNum();
+					scrolNStep();
 				}
-				rolBlck = true;//Разблокируем свайп
-			}	}
-
+				rolBlck = true;		}	}
 	
-//задание наборов событий тачскрина, либо мыши
-	let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
-	if(isTouchDevice==true){
-//		console.log("isTouchDevice");
+		function CalCurNum() {
+			for (let i = 0; i < slide.length; i++) {
+				let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
+				if (diff>0){
+					if((slide[i].offsetWidth/diff)<2){
+						curNum = i;
+						break;	}	}	}	}
+	
+		function scrolNStep() {
+			let tmp = slide[curNum].offsetLeft - slideCont.offsetLeft;
+			slideCont.scrollTo({left: tmp, behavior: 'smooth'});	}
 
-//========= События тачскрина ==============
-		let timerId=null;
-		let isNatSwipe = true;
-		
-		function SwipeTune() {
-			if (timerId!=null){clearTimeout(timerId);}
-			timerId = setTimeout( function() {
-				timerId=null;
-				console.log("scroll TimeOut");
-				if ((isNatSwipe==true)&&(dragM==false)){
-					//костыль: если скролл закончился, то свайп не выполняем
-					if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
-						for (let i = 0; i < slide.length; i++) {
-							let diff = ((slide[i].offsetLeft - slideCont.offsetLeft + slide[i].offsetWidth) - slideCont.scrollLeft);
-							if (diff>0){
-								if((slide[i].offsetWidth/diff)<2){
-									curNum = i;
-									break;
-								}
-							}
-						}
-						isNatSwipe=false;
-						setTimeout( function() {
-							isNatSwipe=true;
-						}, 500);
-						scrolNStep();//свайп к слайду curNum
-					}
+		function scrolNotEnd() {
+			if((slideCont.scrollWidth - (slideCont.scrollLeft + slideCont.clientWidth))>0){
+				return true;}else{return false;}	}
+	
+		let isTouchDevice = "ontouchstart" in window || navigator.msMaxTouchPoints;
+		if(isTouchDevice==true){
+			let timerId=null;
+			let isNatSwipe = true;
+			function SwipeTune() {
+				if (timerId!=null){clearTimeout(timerId);}
+				timerId = setTimeout( function() {
+					timerId=null;
 					
-				}
-			}, 50);
+					if ((isNatSwipe==true)&&(dragM==false)){
+						CalCurNum();
+						if (scrolNotEnd()){ 
+							isNatSwipe=false;
+							setTimeout( function() {
+								isNatSwipe=true;
+							}, 500);
+							scrolNStep();
+						}
+					}
+				}, 50);
+			}
+			slideCont.addEventListener('scroll', function() {
+				SwipeTune();
+			});
+			slideCont.addEventListener("touchstart", function(e) {
+				dragM = true;
+			});
+			slideCont.addEventListener("touchend", function(e) {
+				dragM = false;
+				SwipeTune();
+			});
+			slideCont.addEventListener("touchcancel", function(e) {
+				dragM = false;
+				SwipeTune();
+			});
+		}else{
+			slideCont.onmousedown = function(e){
+				e.preventDefault();
+				StartSwipe(e);
+			}
+			document.addEventListener("mousemove", function(e) {
+				MoveSwipe(e);
+			});
+			document.addEventListener("mouseup", function(e) {
+				EndSwipe(e);
+			});
 		}
-
-		slideCont.addEventListener('scroll', function() {
-			console.log("0 scroll");
-			SwipeTune();
-		});
-
-
-
-
-
-//--------------------------
-		slideCont.addEventListener("touchstart", function(e) {
-//			console.log("1 touchstart");
-			dragM = true;
-//			e.preventDefault();
-//			StartSwipe(e.changedTouches[0]);
-		});
-
-		slideCont.addEventListener("touchmove", function(e) {
-//			console.log("2 touchmove");
-//			e.preventDefault();
-//			MoveSwipe(e.changedTouches[0]);
-		});
-
-		slideCont.addEventListener("touchend", function(e) {
-//			console.log("3 touchend");
-			dragM = false;
-			SwipeTune();
-//			e.preventDefault();
-//			EndSwipe(e.changedTouches[0]);
-		});
-
-		slideCont.addEventListener("touchcancel", function(e) {
-//			console.log("4 touchcancel");
-			dragM = false;
-			SwipeTune();
-//			e.preventDefault();
-		});
-	}else{
-//		console.log("NOTouch");
-
-	//========= События десктопа ==============
-
-	//нажатие мыши на контейнере
-		slideCont.addEventListener("mousedown", function(e) {
-//			console.log("1 mousedown");
-			e.preventDefault();
-			StartSwipe(e);
-		});
-
-	//перемещение нажатой мыши на документе
-		document.addEventListener("mousemove", function(e) {
-//			console.log("2 mousemove");
-			MoveSwipe(e);
-		});
-
-	//отпускание мыши на документе
-		document.addEventListener("mouseup", function(e) {
-//			console.log("3 mouseup");
-			EndSwipe(e);
-		});
-
-
-/*		
-	//выход мыши за пределы слайдера
-		slideCont.addEventListener("mouseout", function(e) {
-			EndSwipe(e);
-		});
-		*/
-	//============================================
-		
 	}
-
-
-/*
-		slideCont.ontouchstart = function(e) {
-	//		console.log("1 ontouchstart");
-			e.preventDefault();
-	//		console.log("touchstart");
-			StartSwipe(e.changedTouches[0]);
-		}
-
-		slideCont.ontouchmove = function(e) {
-	//		console.log("2 ontouchmove");
-			e.preventDefault();
-	//		console.log("touchmove:  e=" + e + "    Координата=" + e.changedTouches[0]);
-			MoveSwipe(e.changedTouches[0]);
-		}
-
-		slideCont.ontouchend = function(e) {
-	//		console.log("3 ontouchend");
-			e.preventDefault();
-	//		console.log("touchend");
-			EndSwipe(e.changedTouches[0]);
-		}
-
-		slideCont.ontouchcancel = function(e) {
-	//		console.log("4 ontouchcancel");
-			e.preventDefault();
-	//		console.log("touchcancel");
-		}
-*/
-//======================================
-
-
-	//============================================
-
-
-
-/*
-		slideCont.onmousedown = function(e){
-			e.preventDefault();
-			StartSwipe(e);
-		}
-*/
-
-
-	}
-	//============================================
-	
 }
