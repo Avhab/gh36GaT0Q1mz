@@ -1,6 +1,6 @@
 let body = document.querySelector("body");
 
-/*<----тестовый вывод размеров окна*/
+/*<----тестовый вывод размеров окна
 let sizDisp = document.createElement("div");
 body.append(sizDisp);
 sizDisp.style.cssText = "position:fixed;top:2px;left:2px;background:white;color:black;padding:0 5px;border: 1px solid red;";
@@ -11,7 +11,7 @@ function sdReN() {
 	}
 sdReN();
 window.addEventListener("resize", function (e) {sdReN(); });
-/*тестовый вывод размеров окна---->*/
+тестовый вывод размеров окна---->*/
 
 
 let blur = document.createElement("div");
@@ -23,7 +23,6 @@ let burgerMenu = document.querySelector(".burgerMenu");
 
 let header = document.querySelector("header");
 burgerMenu.append(header.querySelector(".header-line02").cloneNode(true));
-/*burgerMenu.append(header.querySelector(".social-block").cloneNode(true));*/
 burgerMenu.append(header.querySelector(".telph-block").cloneNode(true));
 
 blur.style.opacity = "0";
@@ -506,3 +505,91 @@ for (let i = 0; i < dropSel.length; i++) {
 }
 /*  --->>>выпадающий список */
 
+/*Презентация*/
+
+let slides = document.querySelectorAll(".slides");//элемент с скролл-контейнером
+for (let j = 0; j < slides.length; j++) {
+	let sldCont = slides[j].querySelector(".sldCont");//контейнер элементов-скролла
+		let slid = sldCont.querySelectorAll(".sldCont>*");// - слайды
+		
+		let dots = document.createElement("div");
+		slides[j].append(dots);
+		dots.classList.add("dots");
+		for (let j = 0; j < slid.length; j++) {
+			if (j!=0) {slid[j].style.opacity = '0'};
+			let dot = document.createElement("div");
+			dots.append(dot);
+		}
+		let dot = dots.querySelectorAll(".dots>*");
+		for (let i = 0; i < dot.length; i++) {
+			dot[i].onclick = function(){
+				slid[curSl].style.opacity = '0';
+				dot[curSl].classList.remove("mark");
+				curSl = i;
+				dot[curSl].classList.add("mark");
+				slid[curSl].style.opacity = '1';
+			}
+		}
+
+		let scrolNav = slides[j].querySelector(".scrolNav");
+		let arrLeft = scrolNav.querySelector(".arrLeft");
+		let arrRight = scrolNav.querySelector(".arrRight");
+
+		let slideTime = 1000; //время переключения слайлов в мс
+		let curSl = 0; //номер текущего слайда
+		let intID = 0; //ид интервала
+		
+		scrolNav.style.opacity = '0';
+		dot[curSl].classList.add("mark");
+		
+		function MovLeft() {
+			slid[curSl].style.opacity = '0';
+			dot[curSl].classList.remove("mark");
+			if (curSl>0){--curSl;} else {curSl = slid.length - 1;}
+			dot[curSl].classList.add("mark");
+			slid[curSl].style.opacity = '1';}
+			
+		function MovRight() {
+			slid[curSl].style.opacity = '0';
+			dot[curSl].classList.remove("mark");
+			if (curSl==(slid.length - 1)){curSl = 0;} else {++curSl;}
+			dot[curSl].classList.add("mark");
+			slid[curSl].style.opacity = '1';	}
+
+		if (arrLeft) {
+			arrLeft.onclick = function(){
+				clearInterval(intID);
+				MovLeft();
+				}	}
+			
+		if (arrRight) {
+			arrRight.onclick = function(){
+				clearInterval(intID);
+				MovRight();
+			}	}
+		
+		slides[j].addEventListener("mouseleave", function() {
+			scrolNav.style.opacity = '0';
+			setIntrv();
+		});
+/*		
+		slides[j].addEventListener("touchend", function(e) {
+			scrolNav.style.opacity = '0';
+			setIntrv();
+		});
+			
+		slides[j].addEventListener("touchstart", function() {
+			scrolNav.style.opacity = '1';
+			clearTimeout(intID);
+		});
+*/
+		slides[j].addEventListener("mouseenter", function() {
+			scrolNav.style.opacity = '1';
+			clearTimeout(intID);
+			});
+		
+		function setIntrv() {
+			intID = setInterval( function() {MovRight();}, slideTime);
+		}
+		setIntrv();
+}
