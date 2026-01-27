@@ -1,19 +1,5 @@
 let body = document.querySelector("body");
 
-/*<----тестовый вывод размеров окна
-let sizDisp = document.createElement("div");
-body.append(sizDisp);
-sizDisp.style.cssText = "position:fixed;top:2px;left:2px;background:white;color:black;padding:0 5px;border: 1px solid red;";
-function sdReN() {
-	sizDisp.innerHTML = `${window.innerWidth} x ${window.innerHeight}`;
-	if (window.innerWidth<900) {sizDisp.style.fontSize = `${window.innerWidth/20}px`;} else {
-		sizDisp.style.fontSize = `${window.innerWidth/70}px`;}
-	}
-sdReN();
-window.addEventListener("resize", function (e) {sdReN(); });
-тестовый вывод размеров окна---->*/
-
-
 let blur = document.createElement("div");
 blur.classList.add('blur');
 body.prepend(blur);
@@ -536,8 +522,8 @@ for (let j = 0; j < slides.length; j++) {
 		let arrRight = scrolNav.querySelector(".arrRight");
 
 		let slideTime = 1000; //время переключения слайлов в мс
-		let curSl = 0; //номер текущего слайда
-		let intID = 0; //ид интервала
+		let curSl = 0;
+		let intID = 0;
 		
 		scrolNav.style.opacity = '0';
 		dot[curSl].classList.add("mark");
@@ -572,17 +558,7 @@ for (let j = 0; j < slides.length; j++) {
 			scrolNav.style.opacity = '0';
 			setIntrv();
 		});
-/*		
-		slides[j].addEventListener("touchend", function(e) {
-			scrolNav.style.opacity = '0';
-			setIntrv();
-		});
-			
-		slides[j].addEventListener("touchstart", function() {
-			scrolNav.style.opacity = '1';
-			clearTimeout(intID);
-		});
-*/
+
 		slides[j].addEventListener("mouseenter", function() {
 			scrolNav.style.opacity = '1';
 			clearTimeout(intID);
