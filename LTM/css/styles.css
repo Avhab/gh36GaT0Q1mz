@@ -82,13 +82,7 @@ h1 {font-weight:800;font-size: 5.225rem;text-transform:uppercase;}
 h2 {font-weight:500;font-size:2.25rem;text-transform: uppercase;}
 h3 {font-weight:600;font-size:1.75rem;line-height:2.9375rem;}
 
-h1, h2 {
-overflow-wrap: break-word; /* Современный стандарт */
-word-break: break-word; /* Старое название, работает везде */
--webkit-hyphens: auto; /* Для Safari */
--ms-hyphens: auto;
-hyphens: auto;
-}
+h1, h2 {overflow-wrap: break-word;word-break: break-word;-webkit-hyphens: auto;-ms-hyphens: auto;hyphens: auto;}
 
 body * {box-sizing:border-box;}
 * {transition-duration:0.3s;}
@@ -277,8 +271,6 @@ width:48px;height:48px;border-radius:50px;
 background:url(../images/buttArr.svg) center center no-repeat, linear-gradient(#FFF, #FFF);cursor:pointer;}
 .hScroll .rightArr {transform: scaleX(-1);}
 
-
-
 .template01 {margin:3.125rem 0;}
 .template01 .cont {margin-top:4.625rem;}
 
@@ -287,7 +279,7 @@ margin-bottom:0;}
 .template01 {color:#FFF;padding:3.75rem 0 6.25rem 0;}
 .manufPhoto .cont>* {aspect-ratio:560/619;width:560px;overflow:hidden;position:relative;}
 .manufPhoto .cont>* img {object-fit:cover;width:100%;height:100%;}
-@media (max-width:1000px) {.template01 .cont>* {width:100%;}}
+/*@media (max-width:1000px) {.template01 .cont>* {width:100%;}}*/
 
 .manufPhoto .cont .descr {padding:0 31px 31px 18px;
 font-weight:500;font-size:1.375rem;text-transform:uppercase;color: #FFF;
@@ -458,3 +450,9 @@ position:absolute;left:50%;top:50%;transform: translate(-50%, -50%);}
 .scrolNav .arrLeft, .scrolNav .arrRight {background-image: url(../images/buttArr.svg);background-color:#609eeec2;
 background-position:center center;background-repeat:no-repeat;width:3rem;height:9rem;cursor:pointer;}
 .scrolNav .arrRight {transform: scaleX(-1);}
+
+@media (max-width:800px) {
+.presentation .dots {gap:0.5rem;}
+.presentation .dots>* {width:1rem;height:1rem;}
+.scrolNav .arrLeft, .scrolNav .arrRight {
+width:1.5rem;height:4.5rem;}}
