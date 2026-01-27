@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LTM</title>
+  <link type = "text/css" rel="stylesheet" href="css/reset.css">
+  <link type = "text/css" rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<div class="burgerMenu">
+	<div class="clos"></div>
+</div>
+
+<article class="flow-banner">
+	<div class="cont">
+		<form class="footForm">
+			<div class="tit">Оставьте свои контактные данных и наш менеджер свяжется с вами в ближайшее время</div>
+			<input type="text" name="Ваше_имя" required placeholder="Ваше имя">
+			<input type="tel" name="Phone" required placeholder="Ваш телефон" pattern="^[0-9\-\+\\ ]+$">
+			<!-- ВНИМАНИЕ - проверьте id - должен быть уникальным в пределах страницы -->
+			
+			<input type="checkbox" id="chckbx-foot" class="agrChk" onchange="document.getElementById('submit01').disabled = !this.checked;">
+			<label for="chckbx-foot" class="chkLab"><div>Согласен с <span>политикой конфиденциальности</span> и обработкой персональных данных</div></label>
+			
+			<input class="buttn finalBut" disabled type="submit" id="submit01" value="Отправить">
+		</form>
+	</div>
+</article>
+
+
+<header>
+	<div class="wrapG">
+		<div class="header-line header-line01">
+			<div class="logo-block">
+				<a class="logo" href="#"><img src="images/logo.png"></a>
+				<div class="logo-txt">Изготовление металлоконструкций, Екатеринбург</div>
+			</div>
+			<div class="telph-block">
+				<a class="WhatsApp" href="#"><img src="images/header-WhatsApp-icon.svg"></a>
+				<a class="emaiLink" href="mailto:info@3dgo.ru"><img src="images/header-mail-icon.svg"><div>info@3dgo.ru</div></a>
+				<a class="teleph" href="tel:+79221780867"><img src="images/header-phone-icon.svg"><div>+7 (922) 178-08-67</div></a>
+				<a class="teleph" href="#"><img src="images/header-clock-icon.svg"><div>Пн-сб 9:00 -19:00</div></a>
+				<a href="catalog01.html" class="buttn">В каталог</a>
+			</div>
+			<div class="burger"></div>
+		</div>
+		<div class="header-line header-line02">
+			<a href="#">Металлоконструкции</a>
+
+			<div class="dropSel">
+				<div class="tit">Продукция и услуги</div>
+				<div class="options">
+					<a href="product001.html">Буронабивные сваи</a>
+					<a href="#">Винтовые сваи</a>
+					<a href="#">Козловые краны</a>
+					<a href="#">Кран балки</a>
+					<a href="#">Кран штабелер</a>
+					<a href="#">Мостовой кран</a>
+					<a href="#">Опоры освещения</a>
+					<a href="#">Сварные балки</a>
+					<a href="#">Сварные конструкции</a>
+					<a href="#">Фасонки</a>
+					<a href="#">Фермы для крыши</a>
+					<a href="#">Фермы для навеса</a>
+				</div>
+			</div>
+
+			<a href="#">Плазменная резка металла</a>
+			<a href="#">Фото производства</a>
+			<a href="#">О компании</a>
+			<a href="#footer">Контакты</a>
+
+<!--			<a href="#">Информация</a>		-->
+			<div class="dropSel">
+				<div class="tit">Информация</div>
+				<div class="options">
+					<a href="product001.html">Буронабивные сваи</a>
+					<a href="#">Винтовые сваи</a>
+					<a href="#">Козловые краны</a>
+					<a href="#">Кран балки</a>
+					<a href="#">Кран штабелер</a>
+					<a href="#">Мостовой кран</a>
+					<a href="#">Опоры освещения</a>
+					<a href="#">Сварные балки</a>
+					<a href="#">Сварные конструкции</a>
+					<a href="#">Фасонки</a>
+					<a href="#">Фермы для крыши</a>
+					<a href="#">Фермы для навеса</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</header>
+
+<article class="titleSect">
+	<div class="wrapG">
+		<h1>Металлоконструкции</h1>
+		<div class="descr">любой сложности от производителя</div>
+		<div class="descr2">Конструкции из составных материалов</div>
+		<button class="buttn flowForm">Отправить запрос</button>
+		<div class="addinf">
+			<div>Выпускаем в среднем 500 тонн</div>
+			<div>металлоконструкций в месяц</div>
+		</div>
+	</div>
+</article>
+
+<article class="ltmgroup txtSect">
+	<div class="wrapG">
+		<h2>LTM Group</h2>
+		<p class="descr"><b>Выгодное сотрудничество</b> и долгосрочное партнерство</p>
+		<p class="descr"><b>Выполняем проектирование</b>, изготовление и монтаж любых металлоконструкций, строим объекты под ключ. Больше 15 лет работаем на объектах пищевой, нефтяной и газовой, химической промышленности, на предприятиях агропромышленного комплекса, заводах по производству строительных материалов.</p>
+	</div>
+</article>
+
+<article class="template01 manufPhoto" id="manufPhoto">
+	<div class="hScroll">
+		<div class="wrapG">
+			<div class="headBlock">
+				<h2>наша продукция и услуги</h2>
+				<div class="arrCont">
+					<div class="leftArr"></div>
+					<div class="rightArr"></div>
+				</div>
+			</div>
+		</div>
+		<div class="wrapG cont slideCont wide100scrol elastSlides">
+			<div>
+				<img src="images/manufPhoto001.jpg">
+				<div class="descr">
+					<p>Сварные конструкции</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+			<div>
+				<img src="images/manufPhoto002.jpg">
+				<div class="descr">
+					<p>Опоры освещения</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+			<div>
+				<img src="images/manufPhoto003.jpg">
+				<div class="descr">
+					<p>Фермы для крыши</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+			<div>
+				<img src="images/manufPhoto001.jpg">
+				<div class="descr">
+					<p>Сварные конструкции</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+			<div>
+				<img src="images/manufPhoto002.jpg">
+				<div class="descr">
+					<p>Опоры освещения</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+			<div>
+				<img src="images/manufPhoto003.jpg">
+				<div class="descr">
+					<p>Фермы для крыши</p>
+					<a class="LinkArr" href="#"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</article>
+
+<article class="ltmgroup2 txtSect">
+	<div class="wrapG">
+		<h2>ООО «ЛТМ»</h2>
+		<p class="descr">имеет собственный проектный отдел, сборочные, сварочные и заготовительные цеха, складские площадки, логистическое подразделение и монтажные бригады. Производственное оборудование находится в собственности компании, на регулярной основе проходит проверки и модернизацию.</p>
+		<p class="descr">Выполняем весь спектр работ: рассчитываем нагрузки, разрабатываем 3D модель и конструкторскую документацию, реализуем проект, организуем доставку и монтажные работы.</p>
+	</div>
+</article>
+
+<article class="template01 ourDevc">
+	<div class="hScroll wrapG">
+		<div class="headBlock">
+			<h2>наше оборудование</h2>
+			<div class="arrCont">
+				<div class="leftArr"></div>
+				<div class="rightArr"></div>
+			</div>
+		</div>
+		<div class="cont slideCont elastSlides">
+			<div>
+				<div class="imgCont"><img src="images/ourDevc001.jpg"></div>
+				<p class="Tit">Плазменная резка металла</p>
+				<p>Плазменная резка металла: мощная струя плазмы с высокой температурой точно разрезает металлическую заготовку, образуя яркие искры и расплавленный металл.</p>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourDevc002.jpg"></div>
+				<p class="Tit">Ленточная пила по металлу</p>
+				<p>Ленточнопильный станок используется для точной и ровной резки металлических заготовок. </p>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourDevc001.jpg"></div>
+				<p class="Tit">Плазменная резка металла</p>
+				<p>Плазменная резка металла: мощная струя плазмы с высокой температурой точно разрезает металлическую заготовку, образуя яркие искры и расплавленный металл.</p>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourDevc002.jpg"></div>
+				<p class="Tit">Ленточная пила по металлу</p>
+				<p>Ленточнопильный станок используется для точной и ровной резки металлических заготовок. </p>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourDevc001.jpg"></div>
+				<p class="Tit">Плазменная резка металла</p>
+				<p>Плазменная резка металла: мощная струя плазмы с высокой температурой точно разрезает металлическую заготовку, образуя яркие искры и расплавленный металл.</p>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourDevc002.jpg"></div>
+				<p class="Tit">Ленточная пила по металлу</p>
+				<p>Ленточнопильный станок используется для точной и ровной резки металлических заготовок. </p>
+			</div>
+		</div>
+	</div>
+</article>
+
+<article class="txtSect aboutComp">
+	<div class="wrapG">
+		<h2>О компании</h2>
+		<div class="line1">
+			<div class="tale tale1">
+				<div class="figur">60</div>
+				<div class="descr">Квалифицированных специалиста</div>
+			</div>
+			<div class="tale tale2">
+				<div class="figur">38</div>
+				<div class="descr">Единицы оборудования</div>
+			</div>
+			<div class="tale tale3">
+				<div class="figur">10000<span> м2</span></div>
+				<div class="descr">Производственных площадей</div>
+			</div>
+		</div>
+		<div class="line2">
+			<div class="eptSpace"></div>
+			<div class="txt">
+				<p class="descr">Специализация ООО «ЛТМ» – проектирование, производство и монтаж металлоконструкций. Наше ключевое преимущество – полная автономность производственной технологии. Мы сами проектируем, изготавливаем, доставляем и монтируем металлоконструкции под ключ.</p>
+				<a href="#" class="buttn">Подробнее о компании</a>
+			</div>		
+		</div>
+	</div>
+</article>
+
+<article class="template01 ourProjects">
+	<div class="wrapG">
+		<div class="cont">
+			<div>
+				<h2>Выполненные проекты</h2>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourProjects01.jpg"></div>
+				<div class="linkLine">
+					<p>г. Новосибирск, Российская многопрофильная группа компаний «Евросиб»</p>
+					<a href="#"></a>
+				</div>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourProjects02.jpg"></div>
+				<div class="linkLine">
+					<p>г. Новосибирск, Российская многопрофильная группа компаний «Евросиб»</p>
+					<a href="#"></a>
+				</div>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourProjects01.jpg"></div>
+				<div class="linkLine">
+					<p>г. Новосибирск, Российская многопрофильная группа компаний «Евросиб»</p>
+					<a href="#"></a>
+				</div>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourProjects02.jpg"></div>
+				<div class="linkLine">
+					<p>г. Новосибирск, Российская многопрофильная группа компаний «Евросиб»</p>
+					<a href="#"></a>
+				</div>
+			</div>
+			<div>
+				<div class="imgCont"><img src="images/ourProjects01.jpg"></div>
+				<div class="linkLine">
+					<p>г. Новосибирск, Российская многопрофильная группа компаний «Евросиб»</p>
+					<a href="#"></a>
+				</div>
+			</div>
+		</div>
+		<a href="#" class="buttn allProd">Все проекты</a>
+	</div>
+</article>
+
+<article class="ltmgroup2 txtSect">
+	<div class="wrapG">
+		<h2>ООО «ЛТМ»</h2>
+		<p class="descr">имеет собственный проектный отдел, сборочные, сварочные и заготовительные цеха, складские площадки, логистическое подразделение и монтажные бригады. Производственное оборудование находится в собственности компании, на регулярной основе проходит проверки и модернизацию.</p>
+		<p class="descr">Выполняем весь спектр работ: рассчитываем нагрузки, разрабатываем 3D модель и конструкторскую документацию, реализуем проект, организуем доставку и монтажные работы.</p>
+	</div>
+</article>
+
+<article class="template01 sertificates">
+	<div class="wrapG">
+		<h2>Сертификаты ООО "ЛТМ":</h2>
+		<div class="cont">
+			<div><img src="images/sertifikat01.jpg"></div>
+			<div><img src="images/sertifikat02.jpg"></div>
+			<div><img src="images/sertifikat03.jpg"></div>
+			<div><img src="images/sertifikat04.jpg"></div>
+		</div>
+	</div>
+</article>
+
+<article class="txtSect ourPeferences">
+	<div class="wrapG">
+		<div class="col1">
+			<h2>Наши преимущества</h2>
+			<p class="descr">ООО «ЛТМ» имеет собственный проектный отдел, сборочные, сварочные и заготовительные цеха, складские площадки, логистическое подразделение и монтажные бригады. Производственное оборудование находится в собственности компании, на регулярной основе проходит проверки и модернизацию.</p>
+			<a href="#" class="buttn">Подробнее о компании</a>
+		</div>
+		<div class="col2">
+			<div class="tale tale1">
+				<img src="images/tale1.svg">
+				<p class="tit">Собственное производство</p>
+				<p class="descr">Обеспечивает выгодные цены на продукцию, а также возможность изготовления изделий по индивидуальным чертежам</p>
+			</div>
+			<div class="tale tale2">
+				<img src="images/tale2.svg">
+				<p class="tit">Индивидуальный подход</p>
+				<p class="descr">Мы внимательно изучаем задачи, предлагаем оптимальные решения и учитываем все нюансы, чтобы работа была максимально эффективной и удобной.</p>
+			</div>
+			<div class="tale tale3">
+				<img src="images/tale3.svg">
+				<p class="tit">Персональный менеджер</p>
+				<p class="descr">Даёт возможность получать консультации по всем вопросам и контролировать сроки выполнения заказа</p>
+			</div>
+			<div class="tale tale4">
+				<img src="images/tale4.svg">
+				<p class="tit">Оперативность и гибкость</p>
+				<p class="descr">Обеспечивает быструю обработку нестандартных запросов и гибкость в решении производственных задач</p>
+			</div>
+		</div>
+	</div>
+</article>
+
+<article class="txtSect ourClients">
+	<div class="wrapG">
+		<h2>Наши клиенты</h2>
+		<div class="cont">
+			<div class="tale tale1">
+				<img src="images/client01.svg">
+			</div>
+			<div class="tale tale1">
+				<img src="images/client02.svg">
+			</div>
+			<div class="tale tale1">
+				<img src="images/client03.svg">
+			</div>
+			<div class="tale tale1">
+				<img src="images/client04.svg">
+			</div>
+		</div>
+	</div>
+</article>
+
+<article class="txtSect presentation">
+	<div class="wrapG">
+		<h2>Презентация</h2>
+		<div class="cont">
+			<img src="images/presentation001.jpg">
+			<img src="images/presentation002.jpg">
+			<img src="images/presentation003.jpg">
+			<img src="images/presentation004.jpg">
+			<img src="images/presentation005.jpg">
+		</div>
+	</div>
+</article>
+
+
+
+
+
+
+
+
+
+<footer id="footer">
+	<div class="row1">
+		<div class="wrapG">
+			<div class="colm colm1">
+				<a href="#">Металлоконструкции</a>
+				<a href="#">Продукция и услуги</a>
+				<a href="#">Плазменная резка металла</a>
+				<a href="#">Фото производства</a>
+				<a href="#">О компании</a>
+				<a href="#">Контакты</a>
+				<a href="#">Информация </a>
+			</div>
+			<div class="colm colm2">
+				<a href="product001.html">Буронабивные сваи</a>
+				<a href="#">Винтовые сваи</a>
+				<a href="#">Козловые краны</a>
+				<a href="#">Кран балки</a>
+				<a href="#">Кран штабелер</a>
+				<a href="#">Мостовой кран</a>
+			</div>
+			<div class="colm colm3">
+				<a href="#">Опоры освещения</a>
+				<a href="#">Сварные балки</a>
+				<a href="#">Сварные конструкции</a>
+				<a href="#">Фасонки</a>
+				<a href="#">Фермы для крыши</a>
+				<a href="#">Фермы для навеса</a>
+			</div>
+			<div class="colm colm4">
+				<a class="emaiLink" href="mailto:info@3dgo.ru"><img src="images/footer-mail-icon.svg"><div>info@3dgo.ru</div></a>
+				<a class="teleph" href="tel:+79221780867"><img src="images/footer-phone-icon.svg"><div>+7 (922) 178-08-67</div></a>
+				<a class="teleph" href="#"><img src="images/footer-clock-icon.svg"><div>Пн-сб 9:00 -19:00</div></a>
+				<a class="WhatsApp" href="#"><img src="images/footer-WhatsApp-icon.svg"></a>
+				<button class="buttn flowForm">Запросить КП</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row2">
+		<div class="wrapG">
+			<div>© LTM - Изготовление металлоконструкций, Екатеринбург 2026</div>
+			<a href="#">Политика конфиденциальности</a>
+		</div>
+	</div>
+</footer>
+
+<script type="text/javascript" src="js/script.js"></script>
+
+</body>
+</html>
