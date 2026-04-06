@@ -323,7 +323,7 @@ font-weight:500;font-size:1.375rem;text-transform:uppercase;color: #FFF;
 display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;
 position:absolute;width:100%;bottom:0;left:0;}
 .manufPhoto .cont .descr p {max-width:12.125rem;}
-.LinkArr {width:46px;height:46px;border-radius:50px;
+.LinkArr {width:46px;height:46px;border-radius:50px;flex-shrink:0;
 background:url(../images/linkArrow.svg) center center no-repeat, linear-gradient(#FFF, #FFF);cursor:pointer;}
 
 
