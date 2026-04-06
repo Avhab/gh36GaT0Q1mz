@@ -63,6 +63,7 @@
 
 :root {
 --hover_text: #91061A;
+--hover_text_dark: #A5BBCF;
 --hover_butt: #329332;
 --hover_butt_back: #D97483;
 }
@@ -99,39 +100,72 @@ button {font-size:1rem;text-align:center;cursor:pointer;}
 line-height: 100%;padding:1.125rem 1.875rem;max-width:100%;border:none;background: #91061A;color: #FFF;}
 @media (max-width:270px) {.buttn {width:100%;}}
 
-a:hover {color:var(--hover_text);}
-a.buttn:hover {color:white;}
 
+a:hover, .markStat {color:var(--hover_text);}
+.headUnit a:hover, footer a:hover, .headUnit .markStat {color: var(--hover_text_dark);}
+a.buttn:hover {color:white;}
+footer a.buttn:hover {color: var(--hover_text_dark);}
+ 
 .emaiLink img {margin-right:7px;}
 
+.headUnit header {color:#FFF;}
 header {padding:18px 0;}
 header .header-line {display:flex;justify-content:space-between;flex-wrap:nowrap;align-items:center;gap:1rem;}
 header .wrapG {display:flex;flex-direction:column;justify-content:space-between;flex-wrap:nowrap;gap:29px;}
 
 header .logo-block {display:flex;justify-content:left;flex-wrap:nowrap;align-items:center;flex-shrink:1;}
-header .logo {max-width:132px;min-width:50%;aspect-ratio:132/59;overflow:hidden;}
+header .logo {max-width:110px;aspect-ratio:110/54;overflow:hidden;padding:3px 5px;}
+.headUnit header .logo {background:white;}
 header .logo img {object-fit:cover;width:100%;height:100%;}
-header .logo-txt {max-width:9.5rem;font-size:0.875rem;margin-left:1.125rem;min-width:50%;flex-shrink:1;}
-@media (max-width:300px) {header .logo-txt {font-size:0.5rem;margin-left:0.3rem;}}
+header .logo-txt {max-width:9.5em;font-size:0.875rem;margin-left:1.125rem;min-width:50%;flex-shrink:1;}
+@media (max-width:300px) {header .logo {max-width:80px;}
+header .logo-txt {font-size:0.5rem;margin-left:0.3rem;}}
 
 .telph-block {display:flex;justify-content:left;flex-wrap:nowrap;align-items:center;gap:1.875rem;}
 .telph-block>* {display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:9px;}
 .WhatsApp {width: 36px;height: 36px;border-radius: 5px;background: #F6F6F6;display:flex;justify-content:center;align-items:center;}
-.WhatsApp:hover {background:#F2ADB7;}
+.headUnit .WhatsApp {background: #FFFFFF1F;}
 
-a.blkButtn {padding:10px 24px;background:#000;}
-a.blkButtn:hover {color:#F2ADB7;}
+.WhatsApp:hover {background:#F2ADB7;}
+.headUnit .WhatsApp:hover {background:var(--hover_text);}
+
+.iconFrame {width:1.5em;aspect-ratio:1/1;background-size:contain;background-position:center;background-repeat:no-repeat;}
+
+.WhatsApp .iconFrame {background-image:url(../images/header-WhatsApp-icon.svg);width:17px;}
+.emaiLink .iconFrame {background-image:url(../images/header-mail-icon.svg);}
+.teleph .iconFrame {background-image:url(../images/header-phone-icon.svg);width:1.2em;}
+.clockIcon .iconFrame {background-image:url(../images/header-clock-icon.svg);}
+
+.headUnit .WhatsApp .iconFrame {background-image:url(../images/footer-WhatsApp-icon.svg);}
+.headUnit .emaiLink .iconFrame {background-image:url(../images/footer-mail-icon.svg);}
+.headUnit .teleph .iconFrame {background-image:url(../images/footer-phone-icon.svg);}
+.headUnit .clockIcon .iconFrame {background-image:url(../images/footer-clock-icon.svg);}
+
+footer .WhatsApp .iconFrame {background-image:url(../images/footer-WhatsApp-icon.svg);}
+footer .emaiLink .iconFrame {background-image:url(../images/footer-mail-icon.svg);}
+footer .teleph .iconFrame {background-image:url(../images/footer-phone-icon.svg);}
+footer .clockIcon .iconFrame {background-image:url(../images/footer-clock-icon.svg);}
+
+a.headerButton {padding:10px 24px;background:#000;}
+.headUnit a.headerButton {background:#E5E5E5;color:#000;}
+a.headerButton:hover {color:#F2ADB7;}
+.headUnit a.headerButton:hover {color:#d5213b;}
 
 header .burger {display:none;cursor:pointer;width:40px;height:40px;flex-shrink:0;
 background:url(../images/burger.svg) center center no-repeat;}
+.headUnit header .burger {background:url(../images/burgerWhite.svg) center center no-repeat;}
 @media (max-width:1100px) {
 header .burger {display:block;}
 header .telph-block, header .header-line02 {display:none;}}
 
 .burgerMenu {display:none;justify-content:start;flex-wrap:nowrap;align-items:start;gap:2em;flex-direction:column;
-position:fixed;z-index:10;top:0;right:0;background:#FFF;padding:1.5rem calc(1.5rem + 20px) 1.5rem 1.5rem;}
+position:absolute;z-index:10;top:0;right:0;background:#FFF;padding:1.5rem calc(1.5rem + 20px) 1.5rem 1.5rem;
+box-shadow: 0 0 12px 8px #b5b5fb59;}
+.headUnit .burgerMenu {background:#1c1d25;}
+.headUnit .burgerMenu {background: #00062C;}
 .burgerMenu .clos {background:url(../images/closBlack.svg) center center no-repeat;background-size:100%;
 width:15px;height:15px;cursor:pointer;position:absolute;top:1.5rem;right:1.5rem;}
+.headUnit .burgerMenu .clos {background:url(../images/closWhite.svg) center center no-repeat;background-size:100%;}
 .burgerMenu .header-line {display:flex;justify-content:space-between;flex-direction:column;flex-wrap:nowrap;align-items:start;gap:1rem;}
 .burgerMenu .telph-block {display:flex;justify-content:space-between;flex-direction:column;flex-wrap:nowrap;align-items:start;gap:1rem;}
 
@@ -164,9 +198,12 @@ form.footForm input[type="text"], .footForm input[type="tel"] {height:40px;}}
 
 .dropSel {position:relative;cursor:pointer;}
 .dropSel .tit:hover {color:var(--hover_text);}
+.headUnit .dropSel .tit:hover {color: var(--hover_text_dark);}
 .dropSel .options {background:white;position:absolute;top:2em;z-index:5;white-space:nowrap;box-shadow: 4px 4px 12px 8px #b5b5fb59;}
 .dropSel .options a {display:block;padding:10px 13px;}
 .dropSel .options a:hover {color:var(--hover_text);}
+.headUnit .dropSel .options a:hover {color: var(--hover_text_dark);}
+.headUnit .dropSel .options {background:#1c1d25;}
 
 
 .txtSect h2 {margin-bottom:0.6em;}
@@ -221,8 +258,8 @@ list-style-type: none;counter-reset: css-counter;}
 
 .prodPage5 {margin:6.5rem 0 4.1875rem 0;}
 
-.titleSect {background:url(../images/backimg01.jpg) center center no-repeat;background-size:cover;
-color:#FFF;text-align:center;aspect-ratio:1920/1069;max-height:1071px;min-width:100%;}
+.headUnit {background:url(../images/backimg01.jpg) center center no-repeat;background-size:cover;}
+.titleSect {color:#FFF;text-align:center;aspect-ratio:1920/1069;max-height:1071px;min-width:100%;}
 .titleSect .wrapG {display:flex;flex-direction:column;justify-content:center;flex-wrap:nowrap;align-items:center;gap:1rem;
 height:100%;position:relative;}
 .titleSect .descr {font-size:2.25rem;text-transform: uppercase;}
@@ -230,8 +267,10 @@ height:100%;position:relative;}
 .titleSect .buttn {margin-top:2.3rem;}
 .titleSect .addinf {display:flex;flex-direction:column;justify-content:space-between;flex-wrap:nowrap;align-items:start;gap:1.25rem;
 text-align:left;font-size:2.0625rem;font-weight:700;
-width:12.12em;max-width:100%;padding:1.12em 1.12em 0.9em;background: #05192C6B;
+background: #05192C6B;backdrop-filter: blur(10.4px);
+width:12.12em;max-width:100%;padding:1.12em 1.12em 0.9em;
 position:absolute;right:0;bottom:0;}
+
 .titleSect .addinf>*:nth-child(2) {font-weight:300;font-size:0.73em;}
 @media (max-width:1200px) {
 .titleSect h1 {font-size:4rem;}
@@ -266,7 +305,7 @@ position:absolute;right:0;bottom:0;}
 
 .arrCont {display:flex;justify-content:space-between;flex-wrap:nowrap;flex-shrink:0;gap:12px;}
 .hScroll .leftArr, .hScroll .rightArr {
-width:48px;height:48px;border-radius:50px;
+width:48px;height:48px;border-radius:50%;
 background:url(../images/buttArr.svg) center center no-repeat, linear-gradient(#FFF, #FFF);cursor:pointer;}
 .hScroll .rightArr {transform: scaleX(-1);}
 
@@ -406,7 +445,9 @@ display:flex;justify-content:start;flex-direction:column;flex-wrap:nowrap;align-
 footer .row1 .colm:nth-child(n + 2) {border-left:  1px solid #FFFFFF29;}
 footer .row1 .colm:first-child {padding-left:0;width:calc(25% - 0.666*2.8125rem);}
 footer .row1 .colm:last-child {padding-right:0;width:calc(25% - 0.666*2.8125rem);}
-footer .colm4 .emaiLink, footer .colm4 .teleph {display:flex;justify-content:start;align-items:center;flex-wrap:nowrap;gap:9px;}
+footer .colm4 .emaiLink, footer .colm4 .teleph , footer .colm4 .clockIcon
+{display:flex;justify-content:start;align-items:center;flex-wrap:nowrap;gap:9px;}
+
 footer .WhatsApp {background: #FFFFFF1F;}
 footer .WhatsApp:hover {background:var(--hover_text);}
 footer .buttn {margin-top:auto;}
